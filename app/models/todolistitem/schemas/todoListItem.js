@@ -8,7 +8,7 @@ var todoListItemSchema = {
         type: Boolean
     },
 
-    todo: {
+    todoName: {
         required: true,
         type: String
     }
