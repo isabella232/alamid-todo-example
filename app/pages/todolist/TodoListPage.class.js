@@ -3,9 +3,9 @@
 var alamid = require("alamid"),
     Page = alamid.Page;
 
-var Header = require("../../views/header/HeaderView.class.js"),
-    Content = require("../../views/content/ContentView.class.js"),
-    Footer = require("../../views/footer/FooterView.class.js");
+var TodoListHeaderView = require("../../views/todolist/header/TodoListHeaderView.class.js"),
+    TodoListContentView = require("../../views/todolist/content/TodoListContentView.class.js"),
+    TodoListFooterView = require("../../views/todolist/footer/TodoListFooterView.class.js");
 
 var TodoListPage = Page.define("TodoListPage", {
 
@@ -14,7 +14,7 @@ var TodoListPage = Page.define("TodoListPage", {
      */
     __header: null,
 
-    /*
+    /**
      * @type {ContentView}
      */
     __content: null,
@@ -36,13 +36,13 @@ var TodoListPage = Page.define("TodoListPage", {
 
     _initViews: function () {
 
-        this.__header = new Header();
+        this.__header = new TodoListHeaderView();
         this.Super._append(this.__header).at("todo_page");
 
-        this.__content = new Content();
+        this.__content = new TodoListContentView();
         this.Super._append(this.__content).at("todo_page");
 
-        this.__footer = new Footer();
+        this.__footer = new TodoListFooterView();
         this.Super._append(this.__footer).at("todo_page");
 
     }

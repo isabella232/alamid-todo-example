@@ -5,7 +5,7 @@ var alamid = require("alamid"),
 
 var ContentFooterView = View.define("ConentFooterView", {
 
-    $template: require("./ContentFooterView.html")
+    $template: require("./TodoListFooterView.html")
 
 });
 

@@ -3,10 +3,9 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var TodoListViewCollection = require("./todolist/TodoListViewCollection.class.js"),
-    ContentFooterView = require("./footer/ContentFoorerView.class.js");
+var TodoListViewCollection = require("./todolist/TodoListViewCollection.class.js");
 
-var ContentView = View.define("ContentView", {
+var TodoListContentView = View.define("TodoListContentView", {
 
     /**
      * @type {TodoListView}
@@ -18,7 +17,7 @@ var ContentView = View.define("ContentView", {
      */
     __footer: null,
 
-    $template: require("./ContentView.html"),
+    $template: require("./TodoListContentView.html"),
 
     init: function () {
 
@@ -32,11 +31,8 @@ var ContentView = View.define("ContentView", {
         this.__todoList = new TodoListViewCollection();
         this.Super._append(this.__todoList).at("content_view");
 
-        this.__footer = new ContentFooterView();
-        this.Super._append(this.__footer).at("content_view");
-
     }
 
 });
 
-module.exports = ContentView;
+module.exports = TodoListContentView;
