@@ -3,8 +3,10 @@
 var alamid = require("alamid"),
     Page = alamid.Page;
 
+/*
 var Content = require("../views/content/ContentView.class.js"),
     Footer = require("../views/mainfooter/MainFooterView.class.js");
+*/
 
 var MainPage = Page.define("MainPage", {
 
@@ -12,20 +14,21 @@ var MainPage = Page.define("MainPage", {
     /**
      * @type {HeaderView}
      */
-    __header: null,
+    //__header: null,
 
     /*
      * @type {ContentView}
      */
-    __content: null,
+    //__content: null,
 
     /**
      * @type {FooterView}
      */
-    __footer: null,
+    //__footer: null,
 
     $template: require("./MainPage.html"),
 
+    /*
     init: function () {
 
         this.Super();
@@ -46,6 +49,7 @@ var MainPage = Page.define("MainPage", {
         this.Super._append(this.__footer).at("main_page");
 
     }
+    */
 
 
 });
