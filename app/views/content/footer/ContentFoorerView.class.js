@@ -5,4 +5,8 @@ var alamid = require("alamid"),
 
 var ContentFooterView = View.define("ConentFooterView", {
 
+    $template: require("./ContentFooterView.html")
+
 });
+
+module.exports = ContentFooterView;

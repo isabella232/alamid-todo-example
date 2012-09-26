@@ -3,10 +3,10 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var FooterView = View.define("FooterView", {
+var MainFooterView = View.define("MainFooterView", {
 
     $template: require("./MainFooterView.html")
 
 });
 
-module.exports = FooterView;
+module.exports = MainFooterView;

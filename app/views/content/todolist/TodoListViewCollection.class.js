@@ -3,7 +3,7 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var TodoListItemView = require();
+var TodoListItemView = require("./TodoListItemView.html");
 
 var TodoListView = View.define("TodoListView", {
 

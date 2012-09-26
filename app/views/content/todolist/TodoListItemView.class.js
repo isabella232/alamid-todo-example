@@ -5,7 +5,7 @@ var alamid = require("alamid"),
 
 var TodoListItemView = View.define("TodoListItemView", {
 
-    $template: require("./TodoListItem.html")
+    $template: require("./TodoListItemView.html")
 
 });
 
