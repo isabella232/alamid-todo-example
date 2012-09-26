@@ -1,11 +1,11 @@
 "use strict";
 
 var alamid = require("alamid"),
-    View = alamid.View;
+    ViewCollection = alamid.ViewCollection;
 
-var TodoListItemView = require("./TodoListItemView.html");
+var TodoListItemView = require("./TodoListItemView.class.js");
 
-var TodoListView = View.define("TodoListView", {
+var TodoListViewCollection = ViewCollection.define("TodoListViewCollection", {
 
     $template: require("./TodoListViewCollection.html"),
 
@@ -17,4 +17,4 @@ var TodoListView = View.define("TodoListView", {
 
 });
 
-module.exports = TodoListView;
+module.exports = TodoListViewCollection;

@@ -5,7 +5,7 @@ var alamid = require("alamid"),
 
 var HeaderView = View.define("HeaderView", {
 
-    $template: require("./ContentHeaderView.html")
+    $template: require("./HeaderView.html")
 
 });
 
