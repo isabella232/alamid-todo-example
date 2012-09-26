@@ -9,4 +9,4 @@ var TodoListItemModel = Model.define("TodoListItemModel", {
 
 });
 
-module.exports = TodoListItemModel
+module.exports = TodoListItemModel;
