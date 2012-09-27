@@ -7,8 +7,9 @@ app.addRoute("*", function () {
     // Overwrite alamid's default 404 Page and do nothing,
     // Because in this app there is only one Page: MainPage.
 });
-//var TodoListItem = require("./models/todolistitem/TodoListItemModel.class.js");
-//window.TodoListItem = TodoListItem;
+
+var TodoListItem = require("./models/todolistitem/TodoListItemModel.class.js");
+window.TodoListItem = TodoListItem;
 
 jQuery(document).ready(function onDomReady() {
     app.start();

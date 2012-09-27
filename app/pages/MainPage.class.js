@@ -12,8 +12,6 @@ var MainPage = Page.define("MainPage", {
      */
     __wrapper: null,
 
-    __footer: null,
-
     $template: require("./MainPage.html"),
 
     init: function () {

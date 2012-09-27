@@ -7,6 +7,8 @@ var TodoListHeaderView = require("./header/TodoListHeaderView.class.js"),
     TodoListContentView = require("./content/TodoListContentView.class.js"),
     TodoListFooterView = require("./footer/TodoListFooterView.class.js");
 
+var TodoListItemModel = require("../../../models/todolistitem/TodoListItemModel.class.js");
+
 var TodoListWrapperView = View.define("TodoListWrapperView", {
 
     /**
@@ -23,6 +25,11 @@ var TodoListWrapperView = View.define("TodoListWrapperView", {
      * @type {TodoListFooterView}
      */
     __footer: null,
+
+    /**
+     * @type {ModelCollection}
+     */
+    __todoListItems: null,
 
     $template: require("./TodoListWrapperView.html"),
 
