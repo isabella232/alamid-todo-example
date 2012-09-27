@@ -3,9 +3,9 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var NewTodoInputView = View.define("NewTodoInputView", {
+var TodoAppHeaderNewTodo = View.define("TodoAppHeaderNewTodo", {
 
-    $template: require("./NewTodoInputView.html"),
+    $template: require("./TodoAppHeaderNewTodoView.html"),
 
     init: function () {
 
@@ -34,4 +34,4 @@ var NewTodoInputView = View.define("NewTodoInputView", {
 
 });
 
-module.exports = NewTodoInputView;
+module.exports = TodoAppHeaderNewTodo;

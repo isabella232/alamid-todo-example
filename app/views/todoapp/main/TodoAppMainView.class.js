@@ -4,9 +4,9 @@ var alamid = require("alamid"),
     View = alamid.View;
 
 var TodoListViewCollection = require("./todolist/TodoListViewCollection.class.js"),
-    TodoListItemModel = require("../../../../models/todolistitem/TodoListItemModel.class.js");
+    TodoListItemModel = require("../../../models/todolistitem/TodoListItemModel.class.js");
 
-var TodoListContentView = View.define("TodoListContentView", {
+var TodoAppMainView = View.define("TodoAppMainView", {
 
     /**
      * @type {TodoListView}
@@ -23,7 +23,7 @@ var TodoListContentView = View.define("TodoListContentView", {
      */
     __todoListItems: null,
 
-    $template: require("./TodoListContentView.html"),
+    $template: require("./TodoAppMainView.html"),
 
     init: function () {
 
@@ -34,8 +34,8 @@ var TodoListContentView = View.define("TodoListContentView", {
         this._initSubViews();
         this._initSubViewData();
 
-        TodoListItemModel.on("create", function onCreate(todoListItemCreateEvent) {
-            self.__todoListItems.push(todoListItemCreateEvent.model);
+        TodoListItemModel.on("create", function onCreate(event) {
+            self.__todoListItems.push(event.model);
         });
 
     },
@@ -43,7 +43,7 @@ var TodoListContentView = View.define("TodoListContentView", {
     _initSubViews: function () {
 
         this.__todoList = new TodoListViewCollection();
-        this.Super._append(this.__todoList).at("content_view");
+        this.Super._append(this.__todoList).at("main");
 
     },
 
@@ -65,4 +65,4 @@ var TodoListContentView = View.define("TodoListContentView", {
 
 });
 
-module.exports = TodoListContentView;
+module.exports = TodoAppMainView;

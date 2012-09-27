@@ -3,10 +3,10 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var TodoListItemModel = require("../../../../models/todolistitem/TodoListItemModel.class.js"),
-    NewTodoInputView = require("./newtodoinputview/NewTodoInputView.class.js");
+var TodoListItemModel = require("../../../models/todolistitem/TodoListItemModel.class.js"),
+    TodoAppHeaderNewTodoView = require("./newtodo/TodoAppHeaderNewTodoView.class.js");
 
-var TodoListHeaderView = View.define("TodoListHeaderView", {
+var TodoAppHeaderView = View.define("TodoAppHeaderView", {
 
     /**
      * @type {TodoListItemModel}
@@ -14,11 +14,11 @@ var TodoListHeaderView = View.define("TodoListHeaderView", {
     __newTodoListItem: null,
 
     /**
-     * @type {NewTodoInputView}
+     * @type {TodoAppHeaderNewTodoView}
      */
-    __newTodoInput: null,
+    __newTodo: null,
 
-    $template: require("./TodoListHeaderView.html"),
+    $template: require("./TodoAppHeaderView.html"),
 
     init: function () {
 
@@ -32,11 +32,11 @@ var TodoListHeaderView = View.define("TodoListHeaderView", {
 
         this.__newTodoListItem = new TodoListItemModel();
 
-        this.__newTodoInput = new NewTodoInputView();
-        this.__newTodoInput.bind(this.__newTodoListItem);
-        this.__newTodoInput.on("newTodo", this._onNewTodo);
+        this.__newTodo = new TodoAppHeaderNewTodoView();
+        this.__newTodo.bind(this.__newTodoListItem);
+        this.__newTodo.on("newTodo", this._onNewTodo);
 
-        this.Super._append(this.__newTodoInput).at("header");
+        this.Super._append(this.__newTodo).at("header");
 
     },
 
@@ -59,7 +59,7 @@ var TodoListHeaderView = View.define("TodoListHeaderView", {
                     if (err) throw err;
 
                     self.__newTodoListItem = new TodoListItemModel();
-                    self.__newTodoInput.bind(self.__newTodoListItem)
+                    self.__newTodo.bind(self.__newTodoListItem)
 
                 });
             }
@@ -69,4 +69,4 @@ var TodoListHeaderView = View.define("TodoListHeaderView", {
 
 });
 
-module.exports = TodoListHeaderView;
+module.exports = TodoAppHeaderView;
