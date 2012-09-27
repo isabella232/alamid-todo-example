@@ -41,7 +41,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
         //dummy
         onRead({
             status: "success",
-            data:  { "id": 0, todoName: "Create read service" }
+            data:  { "id": 0, title: "Create read service" }
         })
 
     },
@@ -60,10 +60,10 @@ var TodoListItemService = Service.define("TodoListItemService", {
             status: "success",
             data: [{
                 "id": 1,
-                "todoName": "Create readCollection service 1"
+                "title": "Create readCollection service 1"
             }, {
                 "id": 2,
-                "todoName": "Create readCollection service 2"
+                "title": "Create readCollection service 2"
             }]
         });
 
