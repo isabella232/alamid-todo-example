@@ -58,15 +58,6 @@ var TodoListContentView = View.define("TodoListContentView", {
             }
 
             self.__todoListItems = todoListItems;
-
-            /*
-             if (self.__todoListItems === null) {
-             this.__todoListItems = todoListItems;
-             } else {
-             this.__todoListItems.push(todoListItems);
-             }
-             */
-
             self.__todoList.bind(todoListItems);
 
         });
