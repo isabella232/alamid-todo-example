@@ -14,9 +14,9 @@ var TodoAppMainView = View.define("TodoAppMainView", {
     __todoList: null,
 
     /**
-     * @type {ContentFooterView}
+     * @type {Number}
      */
-    __footer: null,
+    todoListSize: 0,
 
     /**
      * @type {ModelCollection}
@@ -32,10 +32,11 @@ var TodoAppMainView = View.define("TodoAppMainView", {
         this.Super();
 
         this._initSubViews();
-        this._initSubViewData();
 
+        this._initTodoListItems();
         TodoListItemModel.on("create", function onCreate(event) {
             self.__todoListItems.push(event.model);
+            self.todoListSize = self.__todoListItems.size();
         });
 
     },
@@ -47,7 +48,7 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
     },
 
-    _initSubViewData: function () {
+    _initTodoListItems: function () {
 
         var self = this;
 
@@ -58,6 +59,7 @@ var TodoAppMainView = View.define("TodoAppMainView", {
             }
 
             self.__todoListItems = todoListItems;
+            self.todoListSize = todoListItems.size();
             self.__todoList.bind(todoListItems);
 
         });
