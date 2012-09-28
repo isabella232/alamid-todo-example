@@ -49,7 +49,7 @@ var TodoAppHeaderView = View.define("TodoAppHeaderView", {
         var self = this;
 
         this.__newTodoListItem.set("title", newTodoValue.trim());
-        this.__newTodoListItem.validate(function onValidated(validation) {
+        this.__newTodoListItem.validate(false, function onValidated(validation) {
 
             if (validation.result === true) {
 
