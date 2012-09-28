@@ -6,6 +6,8 @@ var alamid = require("alamid"),
 //TodoListItem.find( function (err, todoListItems) { console.log(err, todoListItems) } );
 //TodoListItem.find({}, function (err, todoListItems) { console.log(err, todoListItems) });
 
+var id = 0;
+
 var TodoListItemService = Service.define("TodoListItemService", {
 
     /**
@@ -20,7 +22,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
 
         onCreated({
             status: "success",
-            data: {"id": "3" } //db id
+            data: {"id": id++ } //db id
         })
     },
 
