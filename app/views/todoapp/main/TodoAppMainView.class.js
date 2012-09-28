@@ -38,6 +38,9 @@ var TodoAppMainView = View.define("TodoAppMainView", {
             self.__todoListItems.push(event.model);
             self.todoListSize = self.__todoListItems.size();
         });
+        TodoListItemModel.on("delete", function onDelete(event) {
+            self.todoListSize = self.__todoListItems.size();
+        });
 
     },
 
@@ -49,10 +52,7 @@ var TodoAppMainView = View.define("TodoAppMainView", {
         this.__todoList.delegate("deleteTodo", function onDeleteTodo(view) {
 
             view.getModel().delete(function onDelete(err) {
-
                 if (err) throw err;
-
-                view.dispose();
             });
 
         });
