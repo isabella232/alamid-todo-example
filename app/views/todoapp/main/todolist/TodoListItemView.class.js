@@ -16,7 +16,7 @@ var TodoListItemView = View.define("TodoListItemView", {
         this.Super._addNodeEvents({
             "destroy_button": {
                 "click": function proxyDelete() {
-                    self.Super.emit("deleteTodo");
+                    self.Super.emit("deleteTodo", self.Instance);
                 }
             }
         });

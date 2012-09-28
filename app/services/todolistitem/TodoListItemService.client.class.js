@@ -58,6 +58,8 @@ var TodoListItemService = Service.define("TodoListItemService", {
         //dummy
         onReadCollection({
             status: "success",
+            data: []
+            /*
             data: [{
                 "id": 1,
                 "title": "Create readCollection service 1"
@@ -65,6 +67,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
                 "id": 2,
                 "title": "Create readCollection service 2"
             }]
+            */
         });
 
     },
@@ -86,6 +89,10 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     delete: function (remote, ids, onDeleted) {
 
+        onDeleted({
+            status: "success",
+            data: {}
+        });
     }
 
 });
