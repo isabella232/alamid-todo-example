@@ -46,8 +46,7 @@ var TodoAppHeaderView = View.define("TodoAppHeaderView", {
      */
     _onNewTodo: function (newTodoValue) {
 
-        var nodeMap = this.Super._getNodeMap(),
-            self = this;
+        var self = this;
 
         this.__newTodoListItem.set("title", newTodoValue.trim());
         this.__newTodoListItem.validate(function onValidated(validation) {
