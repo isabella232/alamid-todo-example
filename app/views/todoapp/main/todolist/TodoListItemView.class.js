@@ -17,13 +17,13 @@ var TodoListItemView = View.define("TodoListItemView", {
 
     _initNodeEvents: function () {
 
-        var Super = this.Super,
-            nodeMap = Super._getNodeMap();
+        var self = this,
+            nodeMap = this.Super._getNodeMap();
 
         this.Super._addNodeEvents({
             "destroy_button": {
                 "click": function proxyDelete() {
-                    Super.emit("deleteTodo", self.Instance);
+                    self.Super.emit("deleteTodo", self.Instance);
                 }
             },
             "toggle_checkbox": {
@@ -31,7 +31,7 @@ var TodoListItemView = View.define("TodoListItemView", {
 
                     jQuery(nodeMap["todo_list_item"]).toggleClass("completed");
 
-                    Super.emit("toggleTodoStatus", self.Instance);
+                    self.Super.emit("toggleTodoStatus", self.Instance);
                 }
             }
         });
