@@ -38,8 +38,6 @@ var TodoListItemView = View.define("TodoListItemView", {
 
     }
 
-
-
 });
 
 module.exports = TodoListItemView;
