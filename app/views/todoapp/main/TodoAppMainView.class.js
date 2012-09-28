@@ -46,6 +46,17 @@ var TodoAppMainView = View.define("TodoAppMainView", {
         this.__todoList = new TodoListViewCollection();
         this.Super._append(this.__todoList).at("main");
 
+        this.__todoList.delegate("deleteTodo", function onDeleteTodo(view) {
+
+            view.getModel().delete(function onDelete(err) {
+
+                if (err) throw err;
+
+                view.dispose();
+            });
+
+        });
+
     },
 
     _initTodoListItems: function () {
