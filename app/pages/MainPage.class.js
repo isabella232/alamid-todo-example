@@ -51,6 +51,9 @@ var MainPage = Page.define("MainPage", {
         TodoListItemModel.on("create", function onCreate() {
             self._toggleAppFooterVisibility();
         });
+        TodoListItemModel.on("delete", function onDelete() {
+            self._toggleAppFooterVisibility();
+        });
 
         this._toggleAppFooterVisibility();
 
