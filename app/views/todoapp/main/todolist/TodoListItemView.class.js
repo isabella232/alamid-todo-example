@@ -9,17 +9,33 @@ var TodoListItemView = View.define("TodoListItemView", {
 
     init: function () {
 
-        var self = this;
-
         this.Super();
+
+        this._initNodeEvents();
+
+    },
+
+    _initNodeEvents: function () {
+
+        var Super = this.Super,
+            nodeMap = Super._getNodeMap();
 
         this.Super._addNodeEvents({
             "destroy_button": {
                 "click": function proxyDelete() {
-                    self.Super.emit("deleteTodo", self.Instance);
+                    Super.emit("deleteTodo", self.Instance);
+                }
+            },
+            "toggle_checkbox": {
+                "change": function proxyChange() {
+
+                    jQuery(nodeMap["todo_list_item"]).toggleClass("completed");
+
+                    Super.emit("toggleTodoStatus", self.Instance);
                 }
             }
         });
+
     }
 
 
