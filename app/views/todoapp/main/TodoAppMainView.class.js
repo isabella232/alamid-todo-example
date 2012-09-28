@@ -57,6 +57,21 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
         });
 
+        this.__todoList.delegate("toggleTodoStatus", function onToggleTodoStatus(view) {
+            var todoListItem = view.getModel();
+
+            if (todoListItem.get("completed") === false) {
+                todoListItem.set("completed", true);
+            } else {
+                todoListItem.set("completed", false);
+            }
+
+            todoListItem.save(function onSave(err) {
+                if (err) throw err;
+            });
+
+        });
+
     },
 
     _initTodoListItems: function () {
