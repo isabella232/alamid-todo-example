@@ -3,7 +3,8 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var TodoListViewCollection = require("./todolist/TodoListViewCollection.class.js"),
+var TodoAppMainToggleAllView = require("./toggleall/TodoAppMainToggleAllView.class.js"),
+    TodoListViewCollection = require("./todolist/TodoListViewCollection.class.js"),
     TodoListItemModel = require("../../../models/todolistitem/TodoListItemModel.class.js");
 
 var TodoAppMainView = View.define("TodoAppMainView", {
@@ -87,6 +88,15 @@ var TodoAppMainView = View.define("TodoAppMainView", {
             self.__todoList.bind(todoListItems);
 
         });
+    },
+
+    _toggleToggleAll: function () {
+
+        var nodeMap = this.Super._getNodeMap();
+
+        if (this.todoListSize > 0) {
+            nodeMap["toggle-all"]
+        }
     }
 
 });
