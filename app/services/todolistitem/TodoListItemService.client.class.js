@@ -59,7 +59,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     read: function (remote, ids, onRead) {
 
-        var todoListItemId = ids.todoListItem,
+        var todoListItemId = ids.todolistitem,
             status = "success",
             errMsg;
             data;
@@ -89,15 +89,19 @@ var TodoListItemService = Service.define("TodoListItemService", {
     readCollection: function (remote, ids, params, onReadCollection) {
 
         var status = "success",
-            errMsg,
-            data = _(localStorage).toArray();
+            rawData = _(localStorage).toArray(),
+            data = [];
 
-        _(data).each(function jsonParse(modelData, modelId) {
-            data[modelId] = JSON.parse(modelData);
+        _(rawData).each(function jsonParse(modelData, modelId) {
+            modelData = JSON.parse(modelData);
+            if (modelData !== null) {
+                modelData.id = modelId;
+                data.push(modelData)
+            }
         });
 
         onReadCollection({
-            status: "success",
+            status: status,
             data: data
         });
 
@@ -111,7 +115,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     update: function (remote, ids, model, onUpdated) {
 
-        var todoListItemId = ids.todoListItem,
+        var todoListItemId = ids.todolistitem,
             status = "success",
             errMsg;
 
@@ -135,12 +139,12 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     delete: function (remote, ids, onDeleted) {
 
-        var todoListItemId = ids.todoListItem,
+        var todoListItemId = ids.todolistitem,
             status = "success",
             errMsg;
 
         try {
-            localStorage.removeItem(todoListItemId);
+            localStorage.setItem(todoListItemId, null);
         } catch (err) {
             status = "error";
             errMsg = err.message;
