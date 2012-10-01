@@ -10,14 +10,19 @@ var TodoAppMainToggleAllView = require("./toggleall/TodoAppMainToggleAllView.cla
 var TodoAppMainView = View.define("TodoAppMainView", {
 
     /**
+     * @type {Number}
+     */
+    todoListSize: 0,
+
+    /**
      * @type {TodoListView}
      */
     __todoList: null,
 
     /**
-     * @type {Number}
+     * @type {TodoAppMainToggleAllView}
      */
-    todoListSize: 0,
+    __toggleAll: null,
 
     /**
      * @type {ModelCollection}
@@ -28,41 +33,32 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
     init: function () {
 
-        var self = this;
-
         this.Super();
 
         this._initSubViews();
-
         this._initTodoListItems();
-        TodoListItemModel.on("create", function onCreate(event) {
-            self.__todoListItems.push(event.model);
-            self.todoListSize = self.__todoListItems.size();
-        });
-        TodoListItemModel.on("delete", function onDelete(event) {
-            self.todoListSize = self.__todoListItems.size();
-        });
 
     },
 
     _initSubViews: function () {
 
+        this.__toggleAll = new TodoAppMainToggleAllView();
+        this.__toggleAll.on("toggleAll", this._onToggleAll);
+        this._toggleToggleAĺl();
+        this.Super._prepend(this.__toggleAll).at("main");
+
+
         this.__todoList = new TodoListViewCollection();
         this.__todoList.delegate("deleteTodo", function onDeleteTodo(view) {
-
             view.getModel().delete(function onDelete(err) {
                 if (err) throw err;
             });
-
         });
         this.__todoList.delegate("toggleTodoStatus", function onToggleTodoStatus(view) {
             var todoListItem = view.getModel();
 
-            if (todoListItem.get("completed") === false) {
-                todoListItem.set("completed", true);
-            } else {
-                todoListItem.set("completed", false);
-            }
+            //toggle completed
+            todoListItem.set("completed", !todoListItem.get("completed"));
 
             todoListItem.save(function onSave(err) {
                 if (err) throw err;
@@ -77,6 +73,17 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
         var self = this;
 
+        TodoListItemModel.on("create", function onCreate(event) {
+            self.__todoListItems.push(event.model);
+            self.todoListSize = self.__todoListItems.size();
+            self._toggleToggleAĺl();
+        });
+
+        TodoListItemModel.on("delete", function onDelete(event) {
+            self.todoListSize = self.__todoListItems.size();
+            self._toggleToggleAĺl();
+        });
+
         TodoListItemModel.find({}, function onData(err, todoListItems) {
 
             if (err) {
@@ -90,13 +97,25 @@ var TodoAppMainView = View.define("TodoAppMainView", {
         });
     },
 
-    _toggleToggleAll: function () {
+    /**
+     * @param {Object} event
+     * @protected
+     */
+    _onToggleAll: function (event) {
 
-        var nodeMap = this.Super._getNodeMap();
-
-        if (this.todoListSize > 0) {
-            nodeMap["toggle-all"]
+        /**
+         * @param {TodoListItemModel} todoListItem
+         * @private
+         */
+        function changeComplete(todoListItem) {
+            todoListItem.set("completed", event.complete);
         }
+
+        this.__todoList.each(changeComplete);
+    },
+
+    _toggleToggleAĺl: function () {
+        (this.todoListSize > 0) ? this.__toggleAll.display() : this.__toggleAll.hide();
     }
 
 });
