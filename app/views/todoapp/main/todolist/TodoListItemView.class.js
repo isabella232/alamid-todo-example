@@ -5,20 +5,47 @@ var alamid = require("alamid"),
 
 var TodoListItemView = View.define("TodoListItemView", {
 
+    /**
+     * @type {jQuery}
+     */
+    __$toggleCheckBox: null,
+
+    /**
+     * @type {jQuery}
+     */
+    __$todoListItem: null,
+
     $template: require("./TodoListItemView.html"),
 
     init: function () {
 
         this.Super();
 
+        this._initNodes();
         this._initNodeEvents();
 
     },
 
+    /**
+     * @param {boolean} checked
+     */
+    setChecked: function (checked) {
+
+        this.__$toggleCheckBox.attr("checked", checked);
+        checked ? this.__$todoListItem.addClass("completed") : this.__$todoListItem.removeClass("completed");
+
+    },
+
+    _initNodes: function () {
+        var nodeMap = this.Super._getNodeMap();
+
+        this.__$todoListItem = jQuery(nodeMap["todo_list_item"]);
+        this.__$toggleCheckBox = jQuery(nodeMap["toggle_checkbox"]);
+    },
+
     _initNodeEvents: function () {
 
-        var self = this,
-            nodeMap = this.Super._getNodeMap();
+        var self = this;
 
         this.Super._addNodeEvents({
             "destroy_button": {
@@ -29,7 +56,8 @@ var TodoListItemView = View.define("TodoListItemView", {
             "toggle_checkbox": {
                 "change": function proxyChange() {
 
-                    jQuery(nodeMap["todo_list_item"]).toggleClass("completed");
+                    self.__$todoListItem.toggleClass("completed");
+                    self.__$toggleCheckBox.attr("checked", self.__$todoListItem.hasClass("completed"));
 
                     self.Super.emit("toggleTodoStatus", self.Instance);
                 }
