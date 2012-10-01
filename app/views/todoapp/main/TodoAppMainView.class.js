@@ -35,19 +35,33 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
         this.Super();
 
-        this._initSubViews();
+        this._initToggleAll();
+        this._initTodoList();
         this._initTodoListItems();
 
     },
 
-    _initSubViews: function () {
-
+    /**
+     * @protected
+     */
+    _initToggleAll: function () {
         this.__toggleAll = new TodoAppMainToggleAllView();
         this.__toggleAll.on("toggleAll", this._onToggleAll);
-        this._toggleToggleAĺl();
+        this._toggleToggleAĺlVisibility();
         this.Super._prepend(this.__toggleAll).at("main");
+    },
 
+    /**
+     * @protected
+     */
+    _toggleToggleAĺlVisibility: function () {
+        (this.todoListSize > 0) ? this.__toggleAll.display() : this.__toggleAll.hide();
+    },
 
+    /**
+     * @protected
+     */
+    _initTodoList: function () {
         this.__todoList = new TodoListViewCollection();
         this.__todoList.delegate("deleteTodo", function onDeleteTodo(view) {
             view.getModel().delete(function onDelete(err) {
@@ -66,9 +80,11 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
         });
         this.Super._append(this.__todoList).at("main");
-
     },
 
+    /**
+     * @protected
+     */
     _initTodoListItems: function () {
 
         var self = this;
@@ -76,12 +92,12 @@ var TodoAppMainView = View.define("TodoAppMainView", {
         TodoListItemModel.on("create", function onCreate(event) {
             self.__todoListItems.push(event.model);
             self.todoListSize = self.__todoListItems.size();
-            self._toggleToggleAĺl();
+            self._toggleToggleAĺlVisibility();
         });
 
         TodoListItemModel.on("delete", function onDelete(event) {
             self.todoListSize = self.__todoListItems.size();
-            self._toggleToggleAĺl();
+            self._toggleToggleAĺlVisibility();
         });
 
         TodoListItemModel.find({}, function onData(err, todoListItems) {
@@ -104,18 +120,22 @@ var TodoAppMainView = View.define("TodoAppMainView", {
     _onToggleAll: function (event) {
 
         /**
-         * @param {TodoListItemModel} todoListItem
+         * @param {TodoListItemModel} todoListItemModel
          * @private
          */
-        function changeComplete(todoListItem) {
-            todoListItem.set("completed", event.complete);
+        function setComplete(todoListItemModel) {
+            todoListItemModel.set("completed", event.complete);
         }
 
-        this.__todoList.each(changeComplete);
-    },
+        /**
+         * @param {TodoListItemView} todoListItemView
+         */
+        function setChecked(todoListItemView) {
+            todoListItemView.setChecked(event.complete);
+        }
 
-    _toggleToggleAĺl: function () {
-        (this.todoListSize > 0) ? this.__toggleAll.display() : this.__toggleAll.hide();
+        this.__todoListItems.each(setComplete);
+        this.__todoList.each(setChecked);
     }
 
 });
