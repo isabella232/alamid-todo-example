@@ -15,6 +15,9 @@ var TodoAppMainToggleAllView = View.define("TodoAppMainToggleAllView", {
     init: function () {
 
         this.Super();
+
+        this._initNodeEvents();
+
     },
 
     _initNodeEvents: function () {
