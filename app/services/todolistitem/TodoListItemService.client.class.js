@@ -1,14 +1,28 @@
 "use strict";
 
 var alamid = require("alamid"),
-    Service = alamid.Service;
-
-//TodoListItem.find( function (err, todoListItems) { console.log(err, todoListItems) } );
-//TodoListItem.find({}, function (err, todoListItems) { console.log(err, todoListItems) });
-
-var id = 0;
+    Service = alamid.Service,
+    _ = alamid.util.underscore;
 
 var TodoListItemService = Service.define("TodoListItemService", {
+
+
+    /**
+     * @type {Number}
+     */
+    __modelId: 0,
+
+    init: function () {
+
+        this.Super();
+
+        try {
+            this.__modelId = localStorage.length - 1;
+        } catch(err) {
+            console.log("(todo-list-app) Browser does not support localStorage.");
+        }
+
+    },
 
     /**
      * @param {Boolean|Function} remote
@@ -18,12 +32,24 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     create: function (remote, ids, model, onCreated) {
 
-        //model.validate(function onValidationFinished(result) { });
+        var status = "success",
+            errMsg;
+
+        this.__modelId++;
+
+        try {
+            localStorage.setItem(this.__modelId, JSON.stringify(model.toObject()));
+        } catch (err) {
+            status = "error";
+            errMsg = err.message;
+        }
 
         onCreated({
-            status: "success",
-            data: {"id": id++ } //db id
-        })
+            status: status,
+            message: errMsg,
+            data: { "id": this.__modelId }
+        });
+
     },
 
     /**
@@ -33,17 +59,22 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     read: function (remote, ids, onRead) {
 
-        //request server service
-        /*
-        if (typeof remote === "function") {
-            remote(ids, onRead)
-        }
-        */
+        var todoListItemId = ids.todoListItem,
+            status = "success",
+            errMsg;
+            data;
 
-        //dummy
+        try {
+            data = JSON.parse(localStorage.getItem(todoListItemId));
+        } catch (err) {
+            status = "error";
+            errMsg = err.message;
+        }
+
         onRead({
-            status: "success",
-            data:  { "id": 0, title: "Create read service" }
+            status: status,
+            message: errMsg,
+            data:  data
         })
 
     },
@@ -57,31 +88,44 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     readCollection: function (remote, ids, params, onReadCollection) {
 
-        //dummy
+        var status = "success",
+            errMsg,
+            data = _(localStorage).toArray();
+
+        _(data).each(function jsonParse(modelData, modelId) {
+            data[modelId] = JSON.parse(modelData);
+        });
+
         onReadCollection({
             status: "success",
-            data: []
-            /*
-            data: [{
-                "id": 1,
-                "title": "Create readCollection service 1"
-            }, {
-                "id": 2,
-                "title": "Create readCollection service 2"
-            }]
-            */
+            data: data
         });
 
     },
 
     /**
      * @param {Boolean|Function} remote
-     * @param {Object}ids
+     * @param {Object} ids
      * @param {Model} model
      * @param {Function} onUpdated
      */
     update: function (remote, ids, model, onUpdated) {
 
+        var todoListItemId = ids.todoListItem,
+            status = "success",
+            errMsg;
+
+        try {
+            localStorage.setItem(todoListItemId, JSON.stringify(model.toObject()));
+        } catch (err) {
+            status = "error";
+            errMsg = err.message;
+        }
+
+        onUpdated({
+            status: status,
+            message: errMsg
+        });
     },
 
     /**
@@ -91,9 +135,20 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     delete: function (remote, ids, onDeleted) {
 
+        var todoListItemId = ids.todoListItem,
+            status = "success",
+            errMsg;
+
+        try {
+            localStorage.removeItem(todoListItemId);
+        } catch (err) {
+            status = "error";
+            errMsg = err.message;
+        }
+
         onDeleted({
-            status: "success",
-            data: {}
+            status: status,
+            message: errMsg
         });
     }
 
