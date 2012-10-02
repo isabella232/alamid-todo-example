@@ -1,7 +1,7 @@
 "use strict";
 
 var alamid = require("alamid"),
-    View = alamid.Page;
+    View = alamid.View;
 
 var TodoAppMainToggleAllView = View.define("TodoAppMainToggleAllView", {
 
