@@ -136,7 +136,7 @@ var TodoAppMainView = View.define("TodoAppMainView", {
     _onToggleAll: function (event) {
 
         /**
-         * @param {TodoListItemModel} todoListItemModel
+         * @param {TodoModel} todoListItemModel
          * @private
          */
         function setComplete(todoListItemModel) {
