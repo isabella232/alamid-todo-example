@@ -5,7 +5,7 @@ var alamid = require("alamid"),
 
 var TodoAppMainToggleAllView = require("./toggleall/TodoAppMainToggleAllView.class.js"),
     TodoListViewCollection = require("./todolist/TodoListViewCollection.class.js"),
-    TodoListItemModel = require("../../../models/todolistitem/TodoListItemModel.class.js");
+    TodoListItemModel = require("../../../models/todo/TodoModel.class.js");
 
 var TodoAppMainView = View.define("TodoAppMainView", {
 

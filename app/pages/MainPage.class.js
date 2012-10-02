@@ -7,7 +7,7 @@ var TodoAppHeaderView = require("../views/todoapp/header/TodoAppHeaderView.class
     TodoAppMainView = require("../views/todoapp/main/TodoAppMainView.class.js"),
     TodoAppFooterView = require("../views/todoapp/footer/TodoAppFooterView.class.js");
 
-var TodoListItemModel = require("../models/todolistitem/TodoListItemModel.class.js");
+var TodoListItemModel = require("../models/todo/TodoModel.class.js");
 
 var MainPage = Page.define("MainPage", {
 

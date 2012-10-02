@@ -3,7 +3,7 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var TodoListItemModel = require("../../../models/todolistitem/TodoListItemModel.class.js"),
+var TodoListItemModel = require("../../../models/todo/TodoModel.class.js"),
     TodoAppHeaderNewTodoView = require("./newtodo/TodoAppHeaderNewTodoView.class.js");
 
 var TodoAppHeaderView = View.define("TodoAppHeaderView", {

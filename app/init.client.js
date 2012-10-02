@@ -1,4 +1,5 @@
 "use strict";
+
 var alamid = require("alamid"),
     app = alamid.app,
     jQuery = alamid.util.jQuery;
@@ -8,7 +9,7 @@ app.addRoute("*", function () {
     // Because in this app there is only one Page: MainPage.
 });
 
-var TodoListItem = require("./models/todolistitem/TodoListItemModel.class.js");
+var TodoListItem = require("./models/todo/TodoModel.class.js");
 window.TodoListItem = TodoListItem;
 
 jQuery(document).ready(function onDomReady() {

@@ -4,8 +4,7 @@ var alamid = require("alamid"),
     Service = alamid.Service,
     _ = alamid.util.underscore;
 
-var TodoListItemService = Service.define("TodoListItemService", {
-
+var TodoService = Service.define("TodoService", {
 
     /**
      * @type {Number}
@@ -59,9 +58,9 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     read: function (remote, ids, onRead) {
 
-        var todoListItemId = ids.todolistitem,
+        var todoListItemId = ids.todo,
             status = "success",
-            errMsg;
+            errMsg,
             data;
 
         try {
@@ -75,7 +74,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
             status: status,
             message: errMsg,
             data:  data
-        })
+        });
 
     },
 
@@ -96,7 +95,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
             modelData = JSON.parse(modelData);
             if (modelData !== null) {
                 modelData.id = modelId;
-                data.push(modelData)
+                data.push(modelData);
             }
         });
 
@@ -115,7 +114,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     update: function (remote, ids, model, onUpdated) {
 
-        var todoListItemId = ids.todolistitem,
+        var todoListItemId = ids.todo,
             status = "success",
             errMsg;
 
@@ -139,7 +138,7 @@ var TodoListItemService = Service.define("TodoListItemService", {
      */
     delete: function (remote, ids, onDeleted) {
 
-        var todoListItemId = ids.todolistitem,
+        var todoListItemId = ids.todo,
             status = "success",
             errMsg;
 
@@ -158,4 +157,4 @@ var TodoListItemService = Service.define("TodoListItemService", {
 
 });
 
-module.exports = TodoListItemService;
+module.exports = TodoService;
