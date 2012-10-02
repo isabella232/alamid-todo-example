@@ -47,14 +47,26 @@ var MainPage = Page.define("MainPage", {
         this.Super._append(this.__appMain).at("todoapp");
 
         this.__appFooter = new TodoAppFooterView();
-        this.Super._append(this.__appFooter).at("todoapp");
+        this.__appFooter.on("showAll", function onShowAll() {
+
+        });
+        this.__appFooter.on("showAll", this.__appMain.showAll);
+        this.__appFooter.on("showActive", this.__appMain.showActive);
+        this.__appFooter.on("showCompleted", this.__appMain.showCompleted);
+        this.__appFooter.on("clearCompleted", function onClearCompleted() {
+
+        });
         TodoListItemModel.on("create", function onCreate() {
+            self.__appFooter.setTodoCount(self.__appMain.getTodoListSize());
             self._toggleAppFooterVisibility();
         });
         TodoListItemModel.on("delete", function onDelete() {
+            self.__appFooter.setTodoCount(self.__appMain.getTodoListSize());
             self._toggleAppFooterVisibility();
         });
+        this.Super._append(this.__appFooter).at("todoapp");
 
+        this.__appFooter.setTodoCount(this.__appMain.getTodoListSize());
         this._toggleAppFooterVisibility();
 
     },
