@@ -41,6 +41,22 @@ var TodoAppMainView = View.define("TodoAppMainView", {
 
     },
 
+    showAll: function () {
+        this.__todoList.setFilter(null);
+    },
+
+    showActive: function () {
+        this.__todoList.setFilter(function filterActive(todoListItem) {
+            return todoListItem.get("completed") === false;
+        });
+    },
+
+    showCompleted: function () {
+        this.__todoList.setFilter(function filterCompleted(todoListItem) {
+            return todoListItem.get("completed") == true;
+        });
+    },
+
     /**
      * @protected
      */
