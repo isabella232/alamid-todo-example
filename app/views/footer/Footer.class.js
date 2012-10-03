@@ -3,26 +3,40 @@
 var alamid = require("alamid"),
     View = alamid.View;
 
-var TodoAppFooterView = View.define("TodoAppFooterView", {
+var Footer = View.define("Footer", {
 
-    $template: require("./TodoAppFooterView.html"),
+    todoModels: null,
+
+    $template: require("./Footer.html"),
 
     init: function () {
 
         this.Super();
+        this.__initNodeEvents();
 
-        this._initNodeEvents();
     },
 
     /**
      * @param {Number} count
      */
-    setTodoCount: function (count) {
-        var nodeMap = this.Super._getNodeMap();
-        nodeMap["todo-count"].innerText = count;
+    setTodoModels: function (newTodoModels) {
+
+        var oldTodoModels = this.todoModels;
+
+        if (oldTodoModels) {
+            oldTodoModels.removeListener("add", this.__updateTodoCount);
+            oldTodoModels.removeListener("remove", this.__updateTodoCount);
+        }
+
+        newTodoModels.on("add", this.__updateTodoCount);
+        newTodoModels.on("remove", this.__updateTodoCount);
+
+        this.todoModels = newTodoModels;
+        this.__updateTodoCount();
+
     },
 
-    _initNodeEvents: function () {
+    __initNodeEvents: function () {
 
         var self = this;
 
@@ -49,8 +63,16 @@ var TodoAppFooterView = View.define("TodoAppFooterView", {
             }
         });
 
+    },
+
+    __updateTodoCount: function () {
+
+        var nodeMap = this.Super._getNodeMap();
+
+        nodeMap["todo-count"].innerText = this.todoModels.size();
+
     }
 
 });
 
-module.exports = TodoAppFooterView;
+module.exports = Footer;

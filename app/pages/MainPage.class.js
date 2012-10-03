@@ -3,83 +3,124 @@
 var alamid = require("alamid"),
     Page = alamid.Page;
 
-var TodoAppHeaderView = require("../views/todoapp/header/TodoAppHeaderView.class.js"),
-    TodoAppMainView = require("../views/todoapp/main/TodoAppMainView.class.js"),
-    TodoAppFooterView = require("../views/todoapp/footer/TodoAppFooterView.class.js");
+var Header = require("../views/header/Header.class.js"),
+    MainView = require("../views/mainView/MainView.class.js"),
+    Footer = require("../views/footer/Footer.class.js");
 
-var TodoListItemModel = require("../models/todo/TodoModel.class.js");
+var TodoModel = require("../models/todo/TodoModel.class.js");
 
 var MainPage = Page.define("MainPage", {
 
-    /**
-     * @type {TodoAppHeaderView}
-     */
-    __appHeader: null,
-
-    /**
-     * @type {TodoAppMainView}
-     */
-    __appMain: null,
-
-    /**
-     * @type {TodoAppFooterView}
-     */
-    __appFooter: null,
-
     $template: require("./MainPage.html"),
+
+    /**
+     * @type {Header}
+     */
+    __header: null,
+
+    /**
+     * @type {MainView}
+     */
+    __mainView: null,
+
+    /**
+     * @type {Footer}
+     */
+    __footer: null,
+
+    todoModels: null,
 
     init: function () {
 
         this.Super();
-
-        this._initViews();
+        this.__initViews();
+        this.__initModels();
 
     },
 
-    _initViews: function () {
+    __initModels: function () {
 
         var self = this;
 
-        this.__appHeader = new TodoAppHeaderView();
-        this.Super._append(this.__appHeader).at("todoapp");
+        TodoModel.on("create", function onCreate(event) {
+            self.todoModels.push(event.model);
+        });
 
-        this.__appMain = new TodoAppMainView();
-        this.Super._append(this.__appMain).at("todoapp");
+        TodoModel.find({}, function onData(err, todoModels) {
 
-        this.__appFooter = new TodoAppFooterView();
-        this.__appFooter.on("showAll", function onShowAll() {
+            if (err) throw err;
+
+            todoModels.on("add", self.__toggleFooter);
+            todoModels.on("remove", self.__toggleFooter);
+
+            self.todoModels = todoModels;
+            self.__toggleFooter();
+
+            self.__footer.setTodoModels(todoModels);
+            self.__mainView.setTodoModels(todoModels);
 
         });
-        this.__appFooter.on("showAll", this.__appMain.showAll);
-        this.__appFooter.on("showActive", this.__appMain.showActive);
-        this.__appFooter.on("showCompleted", this.__appMain.showCompleted);
-        this.__appFooter.on("clearCompleted", function onClearCompleted() {
+    },
 
-        });
-        TodoListItemModel.on("create", function onCreate() {
-            self.__appFooter.setTodoCount(self.__appMain.getTodoListSize());
-            self._toggleAppFooterVisibility();
-        });
-        TodoListItemModel.on("delete", function onDelete() {
-            self.__appFooter.setTodoCount(self.__appMain.getTodoListSize());
-            self._toggleAppFooterVisibility();
-        });
-        this.Super._append(this.__appFooter).at("todoapp");
+    __initViews: function () {
 
-        this.__appFooter.setTodoCount(this.__appMain.getTodoListSize());
-        this._toggleAppFooterVisibility();
+        var self = this;
+
+        this.__header = new Header();
+        this.Super._append(this.__header).at("todoapp");
+
+        this.__mainView = new MainView();
+        this.__mainView.on("toggleAll", this.__toggleAll);
+        this.Super._append(this.__mainView).at("todoapp");
+
+        this.__footer = new Footer();
+        this.__footer.on("showAll", this.__mainView.showAll);
+        this.__footer.on("showActive", this.__mainView.showActive);
+        this.__footer.on("showCompleted", this.__mainView.showCompleted);
+        this.__footer.on("clearCompleted", this.__clearCompleted);
+        this.Super._append(this.__footer).at("todoapp");
 
     },
 
     /**
      * @private
      */
-    _toggleAppFooterVisibility: function () {
-        if(this.__appMain.getTodoListSize() > 0) {
-            this.__appFooter.display();
+    __toggleFooter: function () {
+
+        if(this.todoModels.size() > 0) {
+            this.__footer.display();
         } else {
-            this.__appFooter.hide();
+            this.__footer.hide();
         }
+
+    },
+
+    /**
+     * @param {Object} event
+     * @private
+     */
+    __toggleAll: function (value) {
+
+        this.todoModels.each(function setCompleted(todoModel) {
+            todoModel.set("completed", value);
+        });
+
+    },
+
+    __clearCompleted: function () {
+
+        this.todoModels.each(function deleteCompleted(todoModel) {
+            var completed = todoModel.get("completed");
+
+            if (completed) {
+                todoModel.delete(function onTodoModelDelete(err) {
+
+                    if (err) throw err;
+
+                });
+            }
+        });
+
     }
 
 });
