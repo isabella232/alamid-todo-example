@@ -44,16 +44,22 @@ var Footer = View.define("Footer", {
             "all": {
                 "click": function () {
                     self.Super.emit("showAll");
+                    jQuery(self.Super.getNode()).find("a").removeClass("selected");
+                    jQuery(this).addClass("selected");
                 }
             },
             "active": {
                 "click": function () {
                     self.Super.emit("showActive");
+                    jQuery(self.Super.getNode()).find("a").removeClass("selected");
+                    jQuery(this).addClass("selected");
                 }
             },
             "completed": {
                 "click": function () {
                     self.Super.emit("showCompleted");
+                    jQuery(self.Super.getNode()).find("a").removeClass("selected");
+                    jQuery(this).addClass("selected");
                 }
             },
             "clear-completed": {
