@@ -60,6 +60,7 @@ var MainPage = Page.define("MainPage", {
             self.__mainView.setTodoModels(todoModels);
 
         });
+
     },
 
     __initViews: function () {
@@ -87,7 +88,8 @@ var MainPage = Page.define("MainPage", {
      */
     __toggleFooter: function () {
 
-        if(this.todoModels.size() > 0) {
+        console.log(this.todoModels.size());
+        if (this.todoModels.size() > 0) {
             this.__footer.display();
         } else {
             this.__footer.hide();

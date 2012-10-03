@@ -29,14 +29,12 @@ var MainView = View.define("MainView", {
 
     showActive: function () {
         this.__todoViews.setFilter(function filterActive(todoModel) {
-            console.log(todoModel.get("title"), todoModel.get("completed"));
             return todoModel.get("completed") === false;
         });
     },
 
     showCompleted: function () {
         this.__todoViews.setFilter(function filterCompleted(todoModel) {
-            console.log(todoModel.get("title"), todoModel.get("completed"));
             return todoModel.get("completed") === true;
         });
     },
