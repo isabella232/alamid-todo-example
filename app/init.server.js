@@ -2,4 +2,7 @@
 
 var alamid = require("alamid");
 
-alamid.startServer();
+var server = new alamid.Server();
+
+server.bootstrap();
+server.start();

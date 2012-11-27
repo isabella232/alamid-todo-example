@@ -12,15 +12,11 @@ var TodoService = Service.define("TodoService", {
     __modelId: 0,
 
     init: function () {
-
-        this.Super();
-
         try {
             this.__modelId = localStorage.length - 1;
         } catch(err) {
             console.log("(todo-list-app) Browser does not support localStorage.");
         }
-
     },
 
     /**
@@ -30,7 +26,6 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onCreated
      */
     create: function (remote, ids, model, onCreated) {
-
         var status = "success",
             errMsg;
 
@@ -48,7 +43,6 @@ var TodoService = Service.define("TodoService", {
             message: errMsg,
             data: { "id": this.__modelId }
         });
-
     },
 
     /**
@@ -57,7 +51,6 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onRead
      */
     read: function (remote, ids, onRead) {
-
         var todoListItemId = ids.todo,
             status = "success",
             errMsg,
@@ -75,7 +68,6 @@ var TodoService = Service.define("TodoService", {
             message: errMsg,
             data:  data
         });
-
     },
 
 
@@ -86,7 +78,6 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onReadCollection
      */
     readCollection: function (remote, ids, params, onReadCollection) {
-
         var status = "success",
             rawData = _(localStorage).toArray(),
             data = [];
@@ -103,7 +94,6 @@ var TodoService = Service.define("TodoService", {
             status: status,
             data: data
         });
-
     },
 
     /**
@@ -113,7 +103,6 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onUpdated
      */
     update: function (remote, ids, model, onUpdated) {
-
         var todoListItemId = ids.todo,
             status = "success",
             errMsg;
@@ -136,8 +125,7 @@ var TodoService = Service.define("TodoService", {
      * @param {Object} ids
      * @param {Function} onDeleted
      */
-    delete: function (remote, ids, onDeleted) {
-
+    destroy: function (remote, ids, onDeleted) {
         var todoListItemId = ids.todo,
             status = "success",
             errMsg;
@@ -154,7 +142,6 @@ var TodoService = Service.define("TodoService", {
             message: errMsg
         });
     }
-
 });
 
 module.exports = TodoService;

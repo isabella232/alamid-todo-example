@@ -1,11 +1,11 @@
 "use strict";
 
 var alamid = require("alamid"),
-    Page = alamid.Page;
-
-var Header = require("../views/header/Header.class.js"),
+    Header = require("../views/header/Header.class.js"),
     MainView = require("../views/mainView/MainView.class.js"),
-    Footer = require("../views/footer/Footer.class.js");
+    Footer = require("../views/footer/Footer.class.js"),
+    _ = alamid.util.underscore,
+    Page = alamid.Page;
 
 var TodoModel = require("../models/todo/TodoModel.class.js");
 
@@ -31,15 +31,12 @@ var MainPage = Page.define("MainPage", {
     todoModels: null,
 
     init: function () {
-
         this.Super();
         this.__initViews();
         this.__initModels();
-
     },
 
     __initModels: function () {
-
         var self = this;
 
         TodoModel.on("create", function onCreate(event) {
@@ -47,7 +44,6 @@ var MainPage = Page.define("MainPage", {
         });
 
         TodoModel.find({}, function onData(err, todoModels) {
-
             if (err) throw err;
 
             todoModels.on("add", self.__toggleFooter);
@@ -58,13 +54,10 @@ var MainPage = Page.define("MainPage", {
 
             self.__footer.setTodoModels(todoModels);
             self.__mainView.setTodoModels(todoModels);
-
         });
-
     },
 
     __initViews: function () {
-
         var self = this;
 
         this.__header = new Header();
@@ -80,49 +73,35 @@ var MainPage = Page.define("MainPage", {
         this.__footer.on("showCompleted", this.__mainView.showCompleted);
         this.__footer.on("clearCompleted", this.__clearCompleted);
         this.Super._append(this.__footer).at("todoapp");
-
     },
 
     /**
      * @private
      */
     __toggleFooter: function () {
-
-        console.log(this.todoModels.size());
         if (this.todoModels.size() > 0) {
             this.__footer.display();
         } else {
             this.__footer.hide();
         }
-
     },
 
-    /**
-     * @param {Object} event
-     * @private
-     */
     __toggleAll: function (value) {
-
         this.todoModels.each(function setCompleted(todoModel) {
             todoModel.set("completed", value);
         });
-
     },
 
     __clearCompleted: function () {
-
-        this.todoModels.each(function deleteCompleted(todoModel) {
-            var completed = todoModel.get("completed");
-
-            if (completed) {
-                todoModel.delete(function onTodoModelDelete(err) {
-
-                    if (err) throw err;
-
-                });
-            }
+        var modelsToDelete = this.todoModels.filter(function filterCompletedTodos(todoModel) {
+            return todoModel.get("completed") === true;
         });
 
+        _(modelsToDelete).each(function deleteCompleted(todoModel) {
+            todoModel.destroy(function onTodoModelDelete(err) {
+                if (err) throw err;
+            });
+        });
     }
 
 });

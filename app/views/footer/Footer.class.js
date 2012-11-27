@@ -1,7 +1,8 @@
 "use strict";
 
 var alamid = require("alamid"),
-    View = alamid.View;
+    View = alamid.View,
+    _ = alamid.util.underscore;
 
 var Footer = View.define("Footer", {
 
@@ -10,29 +11,26 @@ var Footer = View.define("Footer", {
     $template: require("./Footer.html"),
 
     init: function () {
-
         this.Super();
         this.__initNodeEvents();
-
     },
 
-    /**
-     * @param {Number} count
-     */
     setTodoModels: function (newTodoModels) {
 
         var oldTodoModels = this.todoModels;
 
         if (oldTodoModels) {
-            oldTodoModels.removeListener("add", this.__updateTodoCount);
-            oldTodoModels.removeListener("remove", this.__updateTodoCount);
+            oldTodoModels.removeListener("change", this.__updateStats);
+            oldTodoModels.removeListener("add", this.__updateStats);
+            oldTodoModels.removeListener("remove", this.__updateStats);
         }
 
-        newTodoModels.on("add", this.__updateTodoCount);
-        newTodoModels.on("remove", this.__updateTodoCount);
+        newTodoModels.on("change", this.__updateStats);
+        newTodoModels.on("add", this.__updateStats);
+        newTodoModels.on("remove", this.__updateStats);
 
         this.todoModels = newTodoModels;
-        this.__updateTodoCount();
+        this.__updateStats();
 
     },
 
@@ -71,12 +69,21 @@ var Footer = View.define("Footer", {
 
     },
 
-    __updateTodoCount: function () {
+    __updateStats: function () {
+        var numberOfCompletedTasks = 0,
+            numberOfUncompletedTasks = 0,
+            nodeMap = this.Super._getNodeMap();
 
-        var nodeMap = this.Super._getNodeMap();
+        this.todoModels.each(function (todoModel) {
+            if (todoModel.get("completed")) {
+                numberOfCompletedTasks++;
+            } else {
+                numberOfUncompletedTasks++;
+            }
+        });
 
-        nodeMap["todo-count"].innerText = this.todoModels.size();
-
+        nodeMap["todo-count"].innerText = numberOfUncompletedTasks;
+        nodeMap["completed-count"].innerText = numberOfCompletedTasks;
     }
 
 });

@@ -62,7 +62,7 @@ var MainView = View.define("MainView", {
 
         this.__todoViews = new ViewCollection(TodoView, '<ul id="todo-list" data-node="views"></ul>');
         this.__todoViews.delegate("deleteTodo", function onDeleteTodo(view) {
-            view.getModel().delete(function onDelete(err) {
+            view.getModel().destroy(function onDelete(err) {
                 if (err) throw err;
             });
         });
@@ -72,7 +72,7 @@ var MainView = View.define("MainView", {
             //toggle completed
             todoModel.set("completed", !todoModel.get("completed"));
 
-            todoModel.save(function onSave(err) {
+            todoModel.save(function onTodoModelSaved(err) {
                 if (err) throw err;
             });
 

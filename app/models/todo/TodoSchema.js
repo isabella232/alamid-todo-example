@@ -1,6 +1,6 @@
 "use strict";
 
-var TodoListItemSchema = {
+var TodoSchema = {
 
     completed: {
         default: false,
@@ -15,4 +15,4 @@ var TodoListItemSchema = {
 
 };
 
-module.exports = TodoListItemSchema;
+module.exports = TodoSchema;

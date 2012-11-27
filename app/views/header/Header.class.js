@@ -1,9 +1,9 @@
 "use strict";
 
 var alamid = require("alamid"),
+    constants = require("../../constants.js"),
+    TodoModel = require("../../models/todo/TodoModel.class.js"),
     View = alamid.View;
-
-var TodoModel = require("../../models/todo/TodoModel.class.js");
 
 var Header = View.define("Header", {
 
@@ -23,12 +23,10 @@ var Header = View.define("Header", {
         this.Super._addNodeEvents({
            "title": {
                "keypress": function (event) {
-
-                    if (event.which === 13) {
+                    if (event.which === constants.KEY_ENTER) {
                         self.__createNewTodoModel(this.value.trim());
                         this.value = "";
                     }
-
                }
            }
 
@@ -45,16 +43,8 @@ var Header = View.define("Header", {
         var todoModel = new TodoModel();
 
         todoModel.set("title", todoTitle);
-        todoModel.validate(false, function onTodoModelValidate(validation) {
-
-            if (validation.result === true) {
-                todoModel.save(function onSaved(err) {
-
-                    if (err) throw err;
-
-                });
-            }
-
+        todoModel.save(function onSaved(err) {
+            if (err) throw err;
         });
 
     }
