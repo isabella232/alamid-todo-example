@@ -1,6 +1,30 @@
 <div data-node="page">
     <section id="todoapp" data-node="todoapp">
-
+        <header id="header" data-node="header">
+            <h1>todos</h1>
+            <input id="new-todo" placeholder="What needs to be done?" autofocus data-node="newTitle">
+        </header>
+        <section id="main" data-node="main">
+            <input id="toggle-all" data-node="toggleAll" type="checkbox">
+            <label for="toggle-all">Mark all as complete</label>
+        </section>
+        <footer id="footer" data-node="footer">
+            <span id="todo-count">
+                <strong data-node="todoCount"></strong> item left
+            </span>
+            <ul id="filters" data-node="filters">
+                <li>
+                    <a class="selected" href="#/" data-node="all">All</a>
+                </li>
+                <li>
+                    <a href="#/active" data-node="active">Active</a>
+                </li>
+                <li>
+                    <a href="#/completed" data-node="completed">Completed</a>
+                </li>
+            </ul>
+            <button id="clear-completed" data-node="clearCompleted">Clear completed (<span data-node="completedCount"></span>)</button>
+        </footer>
     </section>
     <footer id="info">
         <p>Double-click to edit a todo</p>
