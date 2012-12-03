@@ -26,9 +26,7 @@ var TodoService = Service.define("TodoService", {
 
         console.log("Obj", obj);
 
-
-        obj.ids.todo = obj.id;
-
+        obj.ids.todo = this.__todoId;
 
         onCreated({
             status : "success",
@@ -65,7 +63,6 @@ var TodoService = Service.define("TodoService", {
     update: function (ids, model, onUpdated) {
 
         var obj = model.toObject();
-
 
 
         onUpdated({

@@ -145,7 +145,6 @@ var TodoService = Service.define("TodoService", {
          */
 
         remote(ids, model, function(res) {
-            console.log(res);
             onUpdated(res);
         });
     },
@@ -156,6 +155,8 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onDeleted
      */
     destroy: function (remote, ids, onDeleted) {
+
+        /*
         var todoListItemId = ids.todo,
             status = "success",
             errMsg;
@@ -175,6 +176,17 @@ var TodoService = Service.define("TodoService", {
                 status: status,
                 message: errMsg
             });
+        }
+        */
+
+        console.log(arguments);
+        if(remote === false) {
+            console.log("remote delete false");
+            //onDeleted({ status : "success" });
+            return;
+        }
+        else {
+            remote(ids, onDeleted);
         }
     }
 });

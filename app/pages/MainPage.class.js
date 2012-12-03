@@ -39,6 +39,14 @@ var MainPage = Page.define("MainPage", {
             self.__todoModels.push(event.model);
         });
 
+        TodoModel.on("remoteDestroy", function(event) {
+
+            self.__todoModels.remove(event.model);
+
+            event.model.destroy(false, function(res) {
+                console.log("destroy res", res);
+            });
+        });
 
         TodoModel.find({}, function onData(err, todoModels) {
             if (err) throw err;
