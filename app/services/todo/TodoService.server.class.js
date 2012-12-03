@@ -2,16 +2,18 @@
 
 var alamid = require("alamid"),
     Service = alamid.Service,
-    _ = alamid.util.underscore,
-    Todo = require("../../models/todo/TodoModel.class.js");
+    _ = alamid.util.underscore;
 
 var TodoService = Service.define("TodoService", {
 
 
     init: function () {
 
+        this.__todos = {};
+
     },
     __todoId : 0,
+    __todos : null,
 
     /**
      * @param {Object} ids
@@ -24,9 +26,9 @@ var TodoService = Service.define("TodoService", {
 
         obj.id = this.__todoId++;
 
-        console.log("Obj", obj);
-
         obj.ids.todo = this.__todoId;
+
+        this.__todos[obj.id] = obj;
 
         onCreated({
             status : "success",
@@ -39,23 +41,38 @@ var TodoService = Service.define("TodoService", {
      * @param {Object} ids
      * @param {Function} onRead
      */
-    read: function (remote, ids, onRead) {
+    read: function (ids, onRead) {
 
+        var id = ids["todo"],
+            model = this.__todos[id];
+
+        if(model !== undefined) {
+            onRead({
+                status : "success",
+                data : model
+            })
+        }
+
+        onRead({
+            status : "fail"
+        });
     },
 
     /**
-     * @param {Boolean|Function} remote
      * @param {Object} ids
      * @param {Object} params
      * @param {Function} onReadCollection
      */
 
-    readCollection: function (remote, ids, params, onReadCollection) {
+    readCollection: function (ids, params, onReadCollection) {
 
+        onReadCollection({
+            status : "success",
+            data : _(this.__todos).toArray()
+        });
     },
 
     /**
-     * @param {Boolean|Function} remote
      * @param {Object} ids
      * @param {Model} model
      * @param {Function} onUpdated
@@ -64,27 +81,30 @@ var TodoService = Service.define("TodoService", {
 
         var obj = model.toObject();
 
+        var id = ids.todo;
+
+        this.__todos[id] = obj;
 
         onUpdated({
             status : "success",
             data : obj
         });
 
-
     },
 
     /**
-     * @param {Boolean|Function} remote
      * @param {Object} ids
      * @param {Function} onDestroyed
      */
     destroy: function (ids, onDestroyed) {
 
+        var id = ids.todo;
+
+        delete this.__todos[id];
+
         onDestroyed({
             status : "success"
         });
-
-
     }
 });
 

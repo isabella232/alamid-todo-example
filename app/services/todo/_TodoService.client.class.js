@@ -63,7 +63,6 @@ var TodoService = Service.define("TodoService", {
          }
          */
         remote(ids, model, function(res) {
-            console.log(res);
             onCreated(res);
         });
 
@@ -179,10 +178,8 @@ var TodoService = Service.define("TodoService", {
         }
         */
 
-        console.log(arguments);
         if(remote === false) {
-            console.log("remote delete false");
-            //onDeleted({ status : "success" });
+            onDeleted({ status : "success" });
             return;
         }
         else {

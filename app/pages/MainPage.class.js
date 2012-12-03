@@ -31,25 +31,39 @@ var MainPage = Page.define("MainPage", {
     __initModels: function () {
         var self = this;
 
+        //LOCAL events
         TodoModel.on("create", function onCreate(event) {
             self.__todoModels.push(event.model);
         });
 
+        //REMOTE EVENTS
         TodoModel.on("remoteCreate", function(event) {
+            //add the model to the model-collection
             self.__todoModels.push(event.model);
+        });
+
+        TodoModel.on("remoteUpdate", function(event) {
+            //update data!
+            event.model.set(event.data);
         });
 
         TodoModel.on("remoteDestroy", function(event) {
 
+            //delete it from the collection
             self.__todoModels.remove(event.model);
 
+            //trigger client-service cleanup
             event.model.destroy(false, function(res) {
                 console.log("destroy res", res);
             });
         });
 
+        //Fill Collection
         TodoModel.find({}, function onData(err, todoModels) {
+
             if (err) throw err;
+
+            console.log(todoModels, todoModels.size(), todoModels.toArray());
 
             todoModels = new TodoModelCollection(todoModels.toArray());
             self.__todoModels = todoModels;
