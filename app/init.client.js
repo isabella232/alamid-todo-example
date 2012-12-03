@@ -12,6 +12,14 @@ app.addRoute("*", function () {
 var TodoListItem = require("./models/todo/TodoModel.class.js");
 window.TodoListItem = TodoListItem;
 
+/*
+TodoListItem.on("remoteCreate", function(event) {
+    console.log("remoteCreate", event);
+});
+*/
+
+window._ = require("alamid").util.underscore;
+
 jQuery(document).ready(function onDomReady() {
     app.start();
 });

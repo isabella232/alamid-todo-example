@@ -35,6 +35,11 @@ var MainPage = Page.define("MainPage", {
             self.__todoModels.push(event.model);
         });
 
+        TodoModel.on("remoteCreate", function(event) {
+            self.__todoModels.push(event.model);
+        });
+
+
         TodoModel.find({}, function onData(err, todoModels) {
             if (err) throw err;
 
@@ -51,13 +56,13 @@ var MainPage = Page.define("MainPage", {
         this.__todoViews = new ViewCollection(TodoView, '<ul id="todo-list" data-node="views"></ul>');
         this.Super._append(this.__todoViews).at("main");
     },
-    
+
     __initNodeEvents: function () {
         var self = this;
-        
+
         this.Super._addNodeEvents({
             newTitle: {
-               keypress: function (event) {
+                keypress: function (event) {
                     if (event.which === constants.KEY_ENTER) {
                         var todoModel = new TodoModel();
 
@@ -67,7 +72,7 @@ var MainPage = Page.define("MainPage", {
                         });
                         this.value = "";
                     }
-               }
+                }
             },
             all: {
                 click: function () {
@@ -89,7 +94,7 @@ var MainPage = Page.define("MainPage", {
             },
             toggleAll: {
                 click: this.__toggleAll
-            }            
+            }
         });
     },
 

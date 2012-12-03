@@ -2,7 +2,8 @@
 
 var alamid = require("alamid"),
     Service = alamid.Service,
-    _ = alamid.util.underscore;
+    _ = alamid.util.underscore,
+    Todo = require("../../models/todo/TodoModel.class.js");
 
 var TodoService = Service.define("TodoService", {
 
@@ -11,6 +12,12 @@ var TodoService = Service.define("TodoService", {
      */
     __modelId: 0,
 
+    __setObject : function(key, object) {
+        return localStorage.setItem(key, JSON.stringify(object));
+    },
+    __getObject : function(key) {
+        return JSON.parse(localStorage.getItem(key));
+    },
     init: function () {
         try {
             this.__modelId = localStorage.length - 1;
@@ -26,25 +33,41 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onCreated
      */
     create: function (remote, ids, model, onCreated) {
+
         var status = "success",
             errMsg;
 
-        this.__modelId++;
+        /*
+         this.__modelId++;
+         var self = this;
 
-        try {
-            localStorage.setItem(this.__modelId, JSON.stringify(model.toObject()));
-        } catch (err) {
-            status = "error";
-            errMsg = err.message;
-        }
+         try {
+         this.__setObject(this.__modelId, model.toObject());
+         } catch (err) {
+         console.log(err);
+         status = "error";
+         errMsg = err.message;
+         }
 
-        onCreated({
-            status: status,
-            message: errMsg,
-            data: { "id": this.__modelId }
+         remote({ todo : this.__modelId }, model, onRemoteCreated);
+
+         function onRemoteCreated() {
+
+         onCreated({
+         status: status,
+         message: errMsg,
+         data: {
+         id: self.__modelId
+         }
+         });
+         }
+         */
+        remote(ids, model, function(res) {
+            console.log(res);
+            onCreated(res);
         });
-    },
 
+    },
     /**
      * @param {Boolean|Function} remote
      * @param {Object} ids
@@ -57,7 +80,7 @@ var TodoService = Service.define("TodoService", {
             data;
 
         try {
-            data = JSON.parse(localStorage.getItem(todoListItemId));
+            data = this.__getObject(todoListItemId);
         } catch (err) {
             status = "error";
             errMsg = err.message;
@@ -69,7 +92,6 @@ var TodoService = Service.define("TodoService", {
             data:  data
         });
     },
-
 
     /**
      * @param {Boolean|Function} remote
@@ -103,20 +125,28 @@ var TodoService = Service.define("TodoService", {
      * @param {Function} onUpdated
      */
     update: function (remote, ids, model, onUpdated) {
-        var todoListItemId = ids.todo,
-            status = "success",
-            errMsg;
 
-        try {
-            localStorage.setItem(todoListItemId, JSON.stringify(model.toObject()));
-        } catch (err) {
-            status = "error";
-            errMsg = err.message;
-        }
+        /*
+         var todoListItemId = ids.todo,
+         status = "success",
+         errMsg;
 
-        onUpdated({
-            status: status,
-            message: errMsg
+         try {
+         this.__setObject(todoListItemId, model.toObject());
+         } catch (err) {
+         status = "error";
+         errMsg = err.message;
+         }
+
+         onUpdated({
+         status: status,
+         message: errMsg
+         });
+         */
+
+        remote(ids, model, function(res) {
+            console.log(res);
+            onUpdated(res);
         });
     },
 
@@ -131,16 +161,21 @@ var TodoService = Service.define("TodoService", {
             errMsg;
 
         try {
-            localStorage.setItem(todoListItemId, null);
+            localStorage.removeItem(todoListItemId);
         } catch (err) {
             status = "error";
             errMsg = err.message;
         }
 
-        onDeleted({
-            status: status,
-            message: errMsg
-        });
+        remote(ids, onRemoteCreated);
+
+        function onRemoteCreated() {
+
+            onDeleted({
+                status: status,
+                message: errMsg
+            });
+        }
     }
 });
 
