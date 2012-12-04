@@ -6,15 +6,13 @@ var alamid = require("alamid"),
 
 var TodoService = Service.define("TodoService", {
 
-
-    init: function () {
-
-        this.__todos = {};
-
-    },
     __todoId : 0,
     __todos : null,
 
+    init: function () {
+        //init todos collection
+        this.__todos = {};
+    },
     /**
      * @param {Object} ids
      * @param {Model} model
@@ -24,46 +22,49 @@ var TodoService = Service.define("TodoService", {
 
         var obj = model.toObject();
 
+        //get an id
         obj.id = this.__todoId++;
 
+        //add to "DB"
         obj.ids.todo = this.__todoId;
 
         this.__todos[obj.id] = obj;
 
+        //response
         onCreated({
             status : "success",
             data : obj
         });
     },
-
     /**
-     * @param {Boolean|Function} remote
      * @param {Object} ids
      * @param {Function} onRead
      */
     read: function (ids, onRead) {
 
-        var id = ids["todo"],
+        var id = ids.todo,
             model = this.__todos[id];
 
         if(model !== undefined) {
+
             onRead({
                 status : "success",
                 data : model
-            })
+            });
+
+            return;
         }
 
         onRead({
-            status : "fail"
+            status : "fail",
+            message : "No todo found for id '" + id + "'"
         });
     },
-
     /**
      * @param {Object} ids
      * @param {Object} params
      * @param {Function} onReadCollection
      */
-
     readCollection: function (ids, params, onReadCollection) {
 
         onReadCollection({
@@ -89,7 +90,6 @@ var TodoService = Service.define("TodoService", {
             status : "success",
             data : obj
         });
-
     },
 
     /**
