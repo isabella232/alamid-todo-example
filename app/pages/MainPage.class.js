@@ -32,11 +32,36 @@ var MainPage = Page.define("MainPage", {
     __initModels: function () {
         var self = this;
 
+        //LOCAL events
         TodoModel.on("create", function onCreate(event) {
             self.__todoModels.push(event.model);
         });
 
+        //REMOTE EVENTS
+        TodoModel.on("remoteCreate", function(event) {
+            //add the model to the model-collection
+            self.__todoModels.push(event.model);
+        });
+
+        TodoModel.on("remoteUpdate", function(event) {
+            //update data!
+            event.model.set(event.data);
+        });
+
+        TodoModel.on("remoteDestroy", function(event) {
+
+            //delete it from the collection
+            self.__todoModels.remove(event.model);
+
+            //trigger client-service cleanup
+            event.model.destroy(false, function(res) {
+                console.log("destroy res", res);
+            });
+        });
+
+        //Fill Collection
         TodoModel.find({}, function onData(err, todoModels) {
+
             if (err) throw err;
 
             todoModels = new TodoModelCollection(todoModels.toArray());
@@ -52,13 +77,13 @@ var MainPage = Page.define("MainPage", {
         this.__todoViews = new ViewCollection(TodoView, '<ul id="todo-list" data-node="views"></ul>');
         this.Super._append(this.__todoViews).at("main");
     },
-    
+
     __initNodeEvents: function () {
         var self = this;
-        
+
         this.Super._addNodeEvents({
             newTitle: {
-               keypress: function (event) {
+                keypress: function (event) {
                     if (event.which === constants.KEY_ENTER) {
                         var todoModel = new TodoModel();
 
@@ -68,7 +93,7 @@ var MainPage = Page.define("MainPage", {
                         });
                         this.value = "";
                     }
-               }
+                }
             },
             all: {
                 click: function () {
@@ -90,7 +115,7 @@ var MainPage = Page.define("MainPage", {
             },
             toggleAll: {
                 click: this.__toggleAll
-            }            
+            }
         });
     },
 

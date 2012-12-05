@@ -54,7 +54,9 @@ var TodoView = View.define("TodoView", {
 
                     $(self.__nodeMap.todoListItem).removeClass("editing");
                     if (newTitle) {
+
                         todoModel.set("title", newTitle);
+
                         todoModel.save(function onModelSave(err) {
                             if (err) throw err;
                         });
