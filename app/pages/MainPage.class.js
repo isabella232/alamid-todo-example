@@ -63,8 +63,6 @@ var MainPage = Page.define("MainPage", {
 
             if (err) throw err;
 
-            console.log(todoModels, todoModels.size(), todoModels.toArray());
-
             todoModels = new TodoModelCollection(todoModels.toArray());
             self.__todoModels = todoModels;
             self.__todoViews.bind(self.__todoModels);
