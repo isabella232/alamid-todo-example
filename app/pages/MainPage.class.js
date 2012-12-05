@@ -20,12 +20,13 @@ var MainPage = Page.define("MainPage", {
 
     __todoViews: null,
 
-    init: function () {
-        this.Super();
+    init: function (ctx) {
+        this.Super(ctx);
         this.__nodeMap = this.Super._getNodeMap();
         this.__initViews();
         this.__initModels();
         this.__initNodeEvents();
+        this.__initFilter();
     },
 
     __initModels: function () {
@@ -91,6 +92,10 @@ var MainPage = Page.define("MainPage", {
                 click: this.__toggleAll
             }            
         });
+    },
+
+    __initFilter: function () {
+        this.__todoViews.setFilter(filters[this.Super._getParams().path.replace("/", "") || "all"]);
     },
 
     __onStatsUpdate: function () {
