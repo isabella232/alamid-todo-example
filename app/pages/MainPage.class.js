@@ -5,7 +5,7 @@ var alamid = require("alamid"),
     TodoModelCollection = require("../collections/todo/TodoModelCollection.class.js"),
     TodoModel = require("../models/todo/TodoModel.class.js"),
     ViewCollection = alamid.ViewCollection,
-    TodoView = require("../views/todoView/TodoView.class.js"),
+    TodoView = require("../views/todo/TodoView.class.js"),
     _ = alamid.util.underscore,
     $ = alamid.util.jQuery,
     Page = alamid.Page;
@@ -37,6 +37,27 @@ var MainPage = Page.define("MainPage", {
             self.__todoModels.push(event.model);
         });
 
+        //make it realtime
+        this.__initRemotePushHandlers();
+
+        //Fill Collection
+        TodoModel.find({}, function onData(err, todoModels) {
+
+            if (err) throw err;
+
+            todoModels = new TodoModelCollection(todoModels.toArray());
+            self.__todoModels = todoModels;
+            self.__todoViews.bind(self.__todoModels);
+
+            todoModels.on("statsUpdate", self.__onStatsUpdate);
+            self.__onStatsUpdate();
+        });
+    },
+
+    __initRemotePushHandlers : function() {
+
+        var self = this;
+
         //REMOTE EVENTS
         TodoModel.on("remoteCreate", function(event) {
             //add the model to the model-collection
@@ -57,19 +78,6 @@ var MainPage = Page.define("MainPage", {
             event.model.destroy(false, function(res) {
                 console.log("destroy res", res);
             });
-        });
-
-        //Fill Collection
-        TodoModel.find({}, function onData(err, todoModels) {
-
-            if (err) throw err;
-
-            todoModels = new TodoModelCollection(todoModels.toArray());
-            self.__todoModels = todoModels;
-            self.__todoViews.bind(self.__todoModels);
-
-            todoModels.on("statsUpdate", self.__onStatsUpdate);
-            self.__onStatsUpdate();
         });
     },
 

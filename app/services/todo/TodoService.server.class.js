@@ -24,10 +24,9 @@ var TodoService = Service.define("TodoService", {
 
         //get an id
         obj.id = this.__todoId++;
-
-        //add to "DB"
         obj.ids.todo = this.__todoId;
 
+        //store in "DB"
         this.__todos[obj.id] = obj;
 
         //response
@@ -45,19 +44,19 @@ var TodoService = Service.define("TodoService", {
         var id = ids.todo,
             model = this.__todos[id];
 
-        if(model !== undefined) {
+        if(model === undefined) {
 
             onRead({
-                status : "success",
-                data : model
+                status : "fail",
+                message : "No todo found for id '" + id + "'"
             });
 
             return;
         }
 
         onRead({
-            status : "fail",
-            message : "No todo found for id '" + id + "'"
+            status : "success",
+            data : model
         });
     },
     /**
@@ -80,9 +79,8 @@ var TodoService = Service.define("TodoService", {
      */
     update: function (ids, model, onUpdated) {
 
-        var obj = model.toObject();
-
-        var id = ids.todo;
+        var id = ids.todo,
+            obj = model.toObject();
 
         this.__todos[id] = obj;
 
