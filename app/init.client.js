@@ -9,7 +9,6 @@ app.addRoute("*", function () {
     // Because in this app there is only one Page: MainPage.
 });
 
-
 window._ = require("alamid").util.underscore;
 
 jQuery(document).ready(function onDomReady() {
