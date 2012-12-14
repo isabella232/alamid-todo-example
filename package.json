@@ -2,7 +2,6 @@
     "name": "alamid-todo-example",
     "version": "0.0.1",
     "description": "a todolist (todomvc) using alamid",
-    "main": "index.js",
     "scripts": {
         "test": ""
     },
@@ -11,7 +10,7 @@
         "url": "https://github.com/peerigon/alamid-todo-example.git"
     },
     "dependencies": {
-        "alamid": "git://github.com/peerigon/alamid.git"
+        "alamid": "0.9.x"
     },
     "keywords": [
         "todomvc",
