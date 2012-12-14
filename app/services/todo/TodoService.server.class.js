@@ -4,14 +4,48 @@ var alamid = require("alamid"),
     Service = alamid.Service,
     _ = alamid.util.underscore;
 
+/**
+ * TodoServer-Service
+ * will be called if TodoService-Client is missing
+ * or you call remote() in TodoService-Client
+ * @type {*}
+ */
 var TodoService = Service.define("TodoService", {
 
     __todoId : 0,
     __todos : null,
 
+    /**
+     * pushes some data in the memory-store
+     * @private
+     */
+    __createInitialData : function() {
+
+        var id = this.__todoId;
+
+        this.__todos[id] = {
+            id : id,
+            title : "hello from alamid"
+        };
+
+        id++;
+
+        this.__todos[id] = {
+            id : id++,
+            title : "contribute to alamid!"
+        };
+
+    },
+    /**
+     * constructor
+     */
     init: function () {
+
         //init todos collection
         this.__todos = {};
+
+        //create some dummy data
+        this.__createInitialData();
     },
     /**
      * @param {Object} ids
