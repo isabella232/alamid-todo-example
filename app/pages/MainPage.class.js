@@ -32,7 +32,7 @@ var MainPage = Page.define("MainPage", {
     __initModels: function () {
         var self = this;
 
-        //LOCAL events
+        //triggers each time a todo-model is created
         TodoModel.on("create", function onCreate(event) {
             self.__todoModels.push(event.model);
         });
@@ -51,33 +51,6 @@ var MainPage = Page.define("MainPage", {
 
             todoModels.on("statsUpdate", self.__onStatsUpdate);
             self.__onStatsUpdate();
-        });
-    },
-
-    __initRemotePushHandlers : function() {
-
-        var self = this;
-
-        //REMOTE EVENTS
-        TodoModel.on("remoteCreate", function(event) {
-            //add the model to the model-collection
-            self.__todoModels.push(event.model);
-        });
-
-        TodoModel.on("remoteUpdate", function(event) {
-            //update data!
-            event.model.set(event.data);
-        });
-
-        TodoModel.on("remoteDestroy", function(event) {
-
-            //delete it from the collection
-            self.__todoModels.remove(event.model);
-
-            //trigger client-service cleanup
-            event.model.destroy(false, function(res) {
-                console.log("destroy res", res);
-            });
         });
     },
 
@@ -163,8 +136,33 @@ var MainPage = Page.define("MainPage", {
                 if (err) throw err;
             });
         });
-    }
+    },
 
+    __initRemotePushHandlers : function() {
+
+        var self = this;
+
+        TodoModel.on("remoteCreate", function(event) {
+            //add the model to the model-collection
+            self.__todoModels.push(event.model);
+        });
+
+        TodoModel.on("remoteUpdate", function(event) {
+            //update data!
+            event.model.set(event.data);
+        });
+
+        TodoModel.on("remoteDestroy", function(event) {
+
+            //delete it from the collection
+            self.__todoModels.remove(event.model);
+
+            //trigger client-service cleanup
+            event.model.destroy(false, function(res) {
+                console.log("destroy res", res);
+            });
+        });
+    }
 });
 
 var filters = {
