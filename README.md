@@ -1,5 +1,7 @@
 ## alamid Todo-MVC
 
+![alamid todo mvc](https://raw.github.com/peerigon/alamid-todo-example/master/alamid-todomvc.png)
+
 An implementation of the [TodoMVC](http://addyosmani.github.com/todomvc/) app based on alamid.
 
 ## Usage 
@@ -29,19 +31,27 @@ We attached the Todo-model to the window-object so you can interact with it dire
 
 __Some Examples:__
 
-`var todo = new Todo();`
+```javascript
+var todo = new Todo();
+```
 
-`todo.set("title", "your title here");`
+```javascript
+todo.set("title", "your title here");
+```
 
-`todo.get();`
+```javascript
+todo.get();
+```
 
 ```javascript
 todo.validate(function onValidation(validation) { 
 	console.log(validation.result);
-})
+});
 ```
 
-`todo.get();`
+```javascript
+todo.get();
+```
 
 ```javascript 
 todo.save(function onSave(err, res) { 
@@ -50,7 +60,9 @@ todo.save(function onSave(err, res) {
 });
 ```
 
-`todo.get();`
+```javascript
+todo.get();
+```
 
 ```javascript
 Todo.findById(1, function onFindById(err, todo) {
