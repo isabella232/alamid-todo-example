@@ -21,17 +21,17 @@ var TodoService = Service.define("TodoService", {
      */
     __createInitialData : function() {
 
-        var id = this.__todoId;
+        this.__todoId++;
 
-        this.__todos[id] = {
-            id : id,
+        this.__todos[this.__todoId] = {
+            id : this.__todoId,
             title : "hello from alamid"
         };
 
-        id++;
+        this.__todoId++;
 
-        this.__todos[id] = {
-            id : id,
+        this.__todos[this.__todoId] = {
+            id : this.__todoId,
             title : "contribute to alamid!"
         };
 
@@ -56,8 +56,10 @@ var TodoService = Service.define("TodoService", {
 
         var obj = model.toObject();
 
+        this.__todoId++;
+
         //get an id
-        obj.id = this.__todoId++;
+        obj.id = this.__todoId;
         obj.ids.todo = this.__todoId;
 
         //store in "DB"
