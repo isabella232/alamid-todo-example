@@ -31,7 +31,7 @@ var TodoService = Service.define("TodoService", {
         id++;
 
         this.__todos[id] = {
-            id : id++,
+            id : id,
             title : "contribute to alamid!"
         };
 
