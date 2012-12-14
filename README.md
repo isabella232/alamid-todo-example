@@ -50,7 +50,7 @@ todo.validate(function onValidation(validation) {
 ```
 
 ```javascript
-todo.get();
+todo.getId();
 ```
 
 ```javascript 
@@ -61,7 +61,7 @@ todo.save(function onSave(err, res) {
 ```
 
 ```javascript
-todo.get();
+todo.getId();
 ```
 
 ```javascript
