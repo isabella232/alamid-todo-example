@@ -3,16 +3,16 @@
 var alamid = require("alamid"),
     Model = alamid.Model;
 
-var TodoModel = Model.define("TodoModel", {
+var TodoModel = Model.extend("TodoModel", {
 
-    $url: "todo",
+    url: "todo",
 
     toggle: function (value) {
         if (value === undefined) {
-            value = !this.Super.get("completed");
+            value = !this.get("completed");
         }
-        this.Super.set("completed", value);
-        this.Super.save(function onModelSave(err) {
+        this.set("completed", value);
+        this.save(function onModelSave(err) {
             if (err) throw err;
         });
     }

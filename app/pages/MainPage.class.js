@@ -10,9 +10,9 @@ var alamid = require("alamid"),
     $ = alamid.util.jQuery,
     Page = alamid.Page;
 
-var MainPage = Page.define("MainPage", {
+var MainPage = Page.extend("MainPage", {
 
-    $template: require("./MainPage.html"),
+    template: require("./MainPage.html"),
 
     __nodeMap: null,
 
@@ -20,9 +20,12 @@ var MainPage = Page.define("MainPage", {
 
     __todoViews: null,
 
-    init: function (ctx) {
-        this.Super(ctx);
-        this.__nodeMap = this.Super._getNodeMap();
+    constructor: function (ctx) {
+        this._super(ctx);
+        this.__nodeMap = this._nodeMap;
+
+        this.__onStatsUpdate = this.__onStatsUpdate.bind(this);
+
         this.__initViews();
         this.__initModels();
         this.__initNodeEvents();
@@ -56,13 +59,13 @@ var MainPage = Page.define("MainPage", {
 
     __initViews: function () {
         this.__todoViews = new ViewCollection(TodoView, '<ul id="todo-list" data-node="views"></ul>');
-        this.Super._append(this.__todoViews).at("main");
+        this._append(this.__todoViews).at("main");
     },
 
     __initNodeEvents: function () {
         var self = this;
 
-        this.Super._addNodeEvents({
+        this._addNodeEvents({
             newTitle: {
                 keypress: function (event) {
                     if (event.which === constants.KEY_ENTER) {
@@ -101,7 +104,7 @@ var MainPage = Page.define("MainPage", {
     },
 
     __initFilter: function () {
-        this.__todoViews.setFilter(filters[this.Super._getParams().path.replace("/", "") || "all"]);
+        this.__todoViews.setFilter(filters[this._params.path.replace("/", "") || "all"]);
     },
 
     __onStatsUpdate: function () {

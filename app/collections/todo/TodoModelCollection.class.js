@@ -4,18 +4,22 @@ var alamid = require("alamid"),
     ModelCollection = alamid.ModelCollection,
     TodoModel = require("../../models/todo/TodoModel.class.js");
 
-var TodoModelCollection = ModelCollection.define("TodoModelCollection", {
+var TodoModelCollection = ModelCollection.extend("TodoModelCollection", {
     __completed: 0,
     __remaining: 0,
-    init: function (models) {
-        this.Super(TodoModel, models);
-        this.Super.on("add", this.__updateStats);
-        this.Super.on("remove", this.__updateStats);
-        this.Super.on("change", this.__updateStats);
+    constructor: function (models) {
+        this._super(TodoModel, models);
+
+        this.__updateStats = this.__updateStats.bind(this);
+
+        this.on("add", this.__updateStats);
+        this.on("remove", this.__updateStats);
+        this.on("change", this.__updateStats);
+
         this.__updateStats();
     },
     completed: function () {
-        return this.Super.filter(function (todoModel) {
+        return this.filter(function (todoModel) {
             return todoModel.get("completed") === true;
         });
     },
@@ -31,7 +35,7 @@ var TodoModelCollection = ModelCollection.define("TodoModelCollection", {
         this.__completed = 0;
         this.__remaining = 0;
 
-        this.Super.each(function (todoModel) {
+        this.each(function (todoModel) {
             if (todoModel.get("completed")) {
                 self.__completed++;
             } else {
@@ -39,7 +43,7 @@ var TodoModelCollection = ModelCollection.define("TodoModelCollection", {
             }
         });
 
-        this.Super.emit("statsUpdate");
+        this.emit("statsUpdate");
     }
 });
 

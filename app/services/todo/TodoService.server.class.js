@@ -10,7 +10,7 @@ var alamid = require("alamid"),
  * or you call remote() in TodoService-Client
  * @type {*}
  */
-var TodoService = Service.define("TodoService", {
+var TodoService = Service.extend("TodoService", {
 
     __todoId : 0,
     __todos : null,
@@ -39,7 +39,7 @@ var TodoService = Service.define("TodoService", {
     /**
      * constructor
      */
-    init: function () {
+    constructor: function () {
 
         //init todos collection
         this.__todos = {};
