@@ -16,14 +16,12 @@ var TodoView = View.extend("TodoView", {
         this.__nodeMap = this._nodeMap;
         this.__initNodeEvents();
 
-        this.__onBeforeRender = this.__onBeforeRender.bind(this);
-
-        this.on("beforeRender", this.__onBeforeRender);
+        this.on("beforeRender", this.__onBeforeRender, this);
     },
 
     __onBeforeRender: function () {
 
-        var completed = this.__model.get("completed");
+        var completed = this._model.get("completed");
 
         $(this.__nodeMap.todoListItem).toggleClass("completed", completed);
     },

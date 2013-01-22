@@ -24,8 +24,6 @@ var MainPage = Page.extend("MainPage", {
         this._super(ctx);
         this.__nodeMap = this._nodeMap;
 
-        this.__onStatsUpdate = this.__onStatsUpdate.bind(this);
-
         this.__initViews();
         this.__initModels();
         this.__initNodeEvents();
@@ -52,7 +50,7 @@ var MainPage = Page.extend("MainPage", {
             self.__todoModels = todoModels;
             self.__todoViews.bind(self.__todoModels);
 
-            todoModels.on("statsUpdate", self.__onStatsUpdate);
+            todoModels.on("statsUpdate", self.__onStatsUpdate, self);
             self.__onStatsUpdate();
         });
     },
