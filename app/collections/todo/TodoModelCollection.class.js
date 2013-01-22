@@ -10,11 +10,9 @@ var TodoModelCollection = ModelCollection.extend("TodoModelCollection", {
     constructor: function (models) {
         this._super(TodoModel, models);
 
-        this.__updateStats = this.__updateStats.bind(this);
-
-        this.on("add", this.__updateStats);
-        this.on("remove", this.__updateStats);
-        this.on("change", this.__updateStats);
+        this.on("add", this.__updateStats, this);
+        this.on("remove", this.__updateStats, this);
+        this.on("change", this.__updateStats, this);
 
         this.__updateStats();
     },
