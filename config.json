@@ -1,0 +1,11 @@
+{
+    "env" : "development",
+    "server" : {
+        "port" : 9001,
+        "useBundling" : true
+    },
+    "client" : {
+        "basePath" : "/",
+        "useWebsockets" : true
+    }
+}
