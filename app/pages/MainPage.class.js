@@ -10,35 +10,33 @@ var alamid = require("alamid"),
     $ = alamid.util.jQuery,
     Page = alamid.Page;
 
-var MainPage = Page.define("MainPage", {
+var MainPage = Page.extend("MainPage", {
 
-    $template: require("./MainPage.html"),
+    template: require("./MainPage.html"),
 
-    __nodeMap: null,
+    _todoModels: null,
 
-    __todoModels: null,
+    _todoViews: null,
 
-    __todoViews: null,
+    constructor: function (ctx) {
+        this._super(ctx);
 
-    init: function (ctx) {
-        this.Super(ctx);
-        this.__nodeMap = this.Super._getNodeMap();
-        this.__initViews();
-        this.__initModels();
-        this.__initNodeEvents();
-        this.__initFilter();
+        this._initViews();
+        this._initModels();
+        this._initNodeEvents();
+        this._initFilter();
     },
 
-    __initModels: function () {
+    _initModels: function () {
         var self = this;
 
         //triggers each time a todo-model is created
         TodoModel.on("create", function onCreate(event) {
-            self.__todoModels.push(event.model);
-        });
+            self._todoModels.push(event.model);
+        }, self);
 
         //make it realtime
-        this.__initRemotePushHandlers();
+        this._initRemotePushHandlers();
 
         //Fill Collection
         TodoModel.find({}, function onData(err, todoModels) {
@@ -46,23 +44,23 @@ var MainPage = Page.define("MainPage", {
             if (err) throw err;
 
             todoModels = new TodoModelCollection(todoModels.toArray());
-            self.__todoModels = todoModels;
-            self.__todoViews.bind(self.__todoModels);
+            self._todoModels = todoModels;
+            self._todoViews.bind(self._todoModels);
 
-            todoModels.on("statsUpdate", self.__onStatsUpdate);
-            self.__onStatsUpdate();
+            todoModels.on("statsUpdate", self._onStatsUpdate, self);
+            self._onStatsUpdate();
         });
     },
 
-    __initViews: function () {
-        this.__todoViews = new ViewCollection(TodoView, '<ul id="todo-list" data-node="views"></ul>');
-        this.Super._append(this.__todoViews).at("main");
+    _initViews: function () {
+        this._todoViews = new ViewCollection(TodoView, '<ul id="todo-list" data-node="views"></ul>');
+        this._append(this._todoViews).at("main");
     },
 
-    __initNodeEvents: function () {
+    _initNodeEvents: function () {
         var self = this;
 
-        this.Super._addNodeEvents({
+        this._addNodeEvents({
             newTitle: {
                 keypress: function (event) {
                     if (event.which === constants.KEY_ENTER) {
@@ -77,59 +75,55 @@ var MainPage = Page.define("MainPage", {
                 }
             },
             all: {
-                click: function () {
-                    self.__selectFilter($(this));
-                }
+                click: "_selectFilter"
             },
             active: {
-                click: function () {
-                    self.__selectFilter($(this));
-                }
+                click: "_selectFilter"
             },
             completed: {
-                click: function () {
-                    self.__selectFilter($(this));
-                }
+                click: "_selectFilter"
             },
             clearCompleted: {
-                click: this.__clearCompleted
+                click: "_clearCompleted"
             },
             toggleAll: {
-                click: this.__toggleAll
+                click: "_toggleAll"
             }
         });
     },
 
-    __initFilter: function () {
-        this.__todoViews.setFilter(filters[this.Super._getParams().path.replace("/", "") || "all"]);
+    _initFilter: function () {
+        this._todoViews.setFilter(filters[this._params.path.replace("/", "") || "all"]);
     },
 
-    __onStatsUpdate: function () {
-        var nodeMap = this.__nodeMap;
+    _onStatsUpdate: function () {
+        var nodeMap = this._nodeMap;
 
-        nodeMap.todoCount.innerText = this.__todoModels.numOfRemaining();
-        nodeMap.completedCount.innerText = this.__todoModels.numOfCompleted();
-        $(this.__nodeMap.footer).toggle(this.__todoModels.size() > 0);
+        nodeMap.todoCount.innerText = this._todoModels.numOfRemaining();
+        nodeMap.completedCount.innerText = this._todoModels.numOfCompleted();
+        $(this._nodeMap.footer).toggle(this._todoModels.size() > 0);
     },
 
-    __selectFilter: function ($btn) {
+    _selectFilter: function (event) {
+
+        var $btn = $(event.target);
         var filterType = $btn.attr("data-node");
 
-        this.__todoViews.setFilter(filters[filterType]);
+        this._todoViews.setFilter(filters[filterType]);
 
-        $(this.__nodeMap.filters).find("a").removeClass("selected");
+        $(this._nodeMap.filters).find("a").removeClass("selected");
         $btn.addClass("selected");
     },
 
-    __toggleAll: function () {
-        var checked = this.__todoModels.numOfRemaining() > 0;
-        this.__todoModels.each(function setCompleted(todoModel) {
+    _toggleAll: function () {
+        var checked = this._todoModels.numOfRemaining() > 0;
+        this._todoModels.each(function setCompleted(todoModel) {
             todoModel.toggle(checked);
         });
     },
 
-    __clearCompleted: function () {
-        var completed = this.__todoModels.completed();
+    _clearCompleted: function () {
+        var completed = this._todoModels.completed();
 
         _(completed).each(function deleteCompleted(todoModel) {
             todoModel.destroy(function onModelDestroy(err) {
@@ -138,30 +132,30 @@ var MainPage = Page.define("MainPage", {
         });
     },
 
-    __initRemotePushHandlers : function() {
+    _initRemotePushHandlers : function() {
 
         var self = this;
 
         TodoModel.on("remoteCreate", function(event) {
             //add the model to the model-collection
-            self.__todoModels.push(event.model);
-        });
+            self._todoModels.push(event.model);
+        }, self);
 
         TodoModel.on("remoteUpdate", function(event) {
             //update data!
             event.model.set(event.data);
-        });
+        }, self);
 
         TodoModel.on("remoteDestroy", function(event) {
 
             //delete it from the collection
-            self.__todoModels.remove(event.model);
+            self._todoModels.remove(event.model);
 
             //trigger client-service cleanup
             event.model.destroy(false, function(res) {
                 console.log("destroy res", res);
             });
-        });
+        }, self);
     }
 });
 

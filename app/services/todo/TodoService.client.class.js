@@ -13,7 +13,7 @@ var alamid = require("alamid"),
  * disable to create client-only app
  * @type {*}
  */
-var TodoService = Service.define("TodoService", {
+var TodoService = Service.extend("TodoService", {
 
     /**
      * @type {Number}
@@ -46,7 +46,7 @@ var TodoService = Service.define("TodoService", {
     /**
      * constructor
      */
-    init: function () {
+    constructor: function () {
         try {
             this.__modelId = localStorage.length - 1;
         } catch(err) {

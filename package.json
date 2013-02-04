@@ -1,6 +1,7 @@
 {
     "name": "alamid-todo-example",
-    "version": "0.0.1",
+    "version": "0.0.2",
+    "author": "peerigon <developers@peerigon.com>",
     "description": "a todolist (todomvc) using alamid",
     "scripts": {
         "test": ""
@@ -10,13 +11,12 @@
         "url": "https://github.com/peerigon/alamid-todo-example.git"
     },
     "dependencies": {
-        "alamid": "0.9.x"
+        "alamid": "0.11"
     },
     "keywords": [
         "todomvc",
         "alamid",
         "example"
     ],
-    "author": "peerigon",
     "license": "MIT"
 }

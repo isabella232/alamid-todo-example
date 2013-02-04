@@ -5,54 +5,52 @@ var alamid = require("alamid"),
     $ = alamid.util.jQuery,
     View = alamid.View;
 
-var TodoView = View.define("TodoView", {
+var TodoView = View.extend("TodoView", {
 
-    $template: require("./TodoView.html"),
+    template: require("./TodoView.html"),
 
-    __nodeMap: null,
+    constructor: function () {
+        this._super();
+        this._initNodeEvents();
 
-    init: function () {
-        this.Super();
-        this.__nodeMap = this.Super._getNodeMap();
-        this.__initNodeEvents();
-        this.Super.on("beforeRender", this.__onBeforeRender);
+        this.on("beforeRender", this._onBeforeRender, this);
     },
 
-    __onBeforeRender: function () {
-        var completed = this.Super.getModel().get("completed");
+    _onBeforeRender: function () {
 
-        $(this.__nodeMap.todoListItem).toggleClass("completed", completed);
+        var completed = this._model.get("completed");
+        $(this._nodeMap.todoListItem).toggleClass("completed", completed);
     },
 
-    __initNodeEvents: function () {
+    _initNodeEvents: function () {
         var self = this;
 
-        this.Super._addNodeEvents({
+        this._addNodeEvents({
             destroyButton: {
                 click: function () {
-                    self.Super.getModel().destroy(function onModelDestroy(err) {
+                    self._model.destroy(function onModelDestroy(err) {
                         if (err) throw err;
                     });
                 }
             },
             completed: {
                 click: function () {
-                    self.Super.getModel().toggle();
+                    self._model.toggle();
                 }
             },
             title: {
                 dblclick: function () {
-                    $(self.__nodeMap.todoListItem).addClass("editing");
-                    self.__nodeMap.titleEdit.value = self.Super.getModel().get("title");
-                    self.__nodeMap.titleEdit.focus();
+                    $(self._nodeMap.todoListItem).addClass("editing");
+                    self._nodeMap.titleEdit.value = self._model.get("title");
+                    self._nodeMap.titleEdit.focus();
                 }
             },
             titleEdit: {
                 blur: function () {
                     var newTitle = this.value.trim(),
-                        todoModel = self.Super.getModel();
+                        todoModel = self._model;
 
-                    $(self.__nodeMap.todoListItem).removeClass("editing");
+                    $(self._nodeMap.todoListItem).removeClass("editing");
                     if (newTitle) {
 
                         todoModel.set("title", newTitle);
@@ -65,7 +63,6 @@ var TodoView = View.define("TodoView", {
                             if (err) throw err;
                         });
                     }
-
                 },
                 keypress: function (event) {
                     if (event.which === constants.KEY_ENTER) {
@@ -74,9 +71,7 @@ var TodoView = View.define("TodoView", {
                 }
             }
         });
-
     }
-
 });
 
 module.exports = TodoView;
