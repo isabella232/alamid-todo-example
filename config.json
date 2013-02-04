@@ -1,7 +1,7 @@
 {
     "env" : "development",
     "server" : {
-        "port" : 9001,
+        "port" : 9000,
         "useBundling" : true
     },
     "client" : {
