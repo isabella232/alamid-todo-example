@@ -1,50 +1,71 @@
 "use strict"; // run code in ES5 strict mode
 
 var alamid = require("alamid"),
+    TodoModel = require("../../models/todo/TodoModel.class.js"),
+    todoFilters = require("./todoFilters.js"),
     ModelCollection = alamid.ModelCollection,
-    TodoModel = require("../../models/todo/TodoModel.class.js");
+    _ = alamid.util.underscore,
+    isCompleted = todoFilters.completed;
 
 var TodoModelCollection = ModelCollection.extend("TodoModelCollection", {
-    __completed: 0,
-    __remaining: 0,
+    _completed: 0,
+    _remaining: 0,
     constructor: function (models) {
         this._super(TodoModel, models);
 
-        this.__updateStats = this.__updateStats.bind(this);
+        this._updateStats = this._updateStats.bind(this);
 
-        this.on("add", this.__updateStats);
-        this.on("remove", this.__updateStats);
-        this.on("change", this.__updateStats);
+        this.on("add", this._updateStats);
+        this.on("remove", this._updateStats);
+        this.on("change", this._updateStats);
 
-        this.__updateStats();
+        this._updateStats();
     },
     completed: function () {
-        return this.filter(function (todoModel) {
-            return todoModel.get("completed") === true;
-        });
+        return this.filter(isCompleted);
     },
     numOfCompleted: function () {
-        return this.__completed;
+        return this._completed;
     },
     numOfRemaining: function () {
-        return this.__remaining;
+        return this._remaining;
     },
-    __updateStats: function () {
+    toggleAll: function () {
+        var checked = this._remaining > 0;
+
+        this.each(function setCompleted(todoModel) {
+            todoModel.toggle(checked);
+        });
+    },
+    clearCompleted: function () {
+        this.each(function destroyCompletedTodos(todoModel) {
+            if (isCompleted(todoModel)) {
+                todoModel.destroy(onModelCallback);
+            }
+        });
+    },
+
+    _updateStats: function () {
         var self = this;
 
-        this.__completed = 0;
-        this.__remaining = 0;
+        this._completed = 0;
+        this._remaining = 0;
 
         this.each(function (todoModel) {
             if (todoModel.get("completed")) {
-                self.__completed++;
+                self._completed++;
             } else {
-                self.__remaining++;
+                self._remaining++;
             }
         });
 
         this.emit("statsUpdate");
     }
 });
+
+// You should do proper error handling here
+function onModelCallback(err) {
+    if (err) throw err;
+}
 
 module.exports = TodoModelCollection;

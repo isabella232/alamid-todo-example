@@ -2,7 +2,7 @@
     <section id="todoapp" data-node="todoapp">
         <header id="header" data-node="header">
             <h1>todos</h1>
-            <input id="new-todo" placeholder="What needs to be done?" autofocus data-node="newTitle">
+            <input id="new-todo" placeholder="What needs to be done?" autofocus data-node="newTodo">
         </header>
         <section id="main" data-node="main">
             <input id="toggle-all" data-node="toggleAll" type="checkbox">
@@ -14,13 +14,13 @@
             </span>
             <ul id="filters" data-node="filters">
                 <li>
-                    <a class="selected" href="#/" data-node="all">All</a>
+                    <a href="/" class="selected" data-node="all">All</a>
                 </li>
                 <li>
-                    <a href="#/active" data-node="active">Active</a>
+                    <a href="/active" data-node="active">Active</a>
                 </li>
                 <li>
-                    <a href="#/completed" data-node="completed">Completed</a>
+                    <a href="/completed" data-node="completed">Completed</a>
                 </li>
             </ul>
             <button id="clear-completed" data-node="clearCompleted">Clear completed (<span data-node="completedCount"></span>)</button>
