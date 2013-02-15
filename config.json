@@ -1,11 +1,15 @@
 {
     "env" : "development",
+    "use" : {
+        "websockets" : true
+    },
     "server" : {
         "port" : 9000,
-        "useBundling" : true
+        "use" : {
+            "bundle" : true
+        }
     },
     "client" : {
-        "basePath" : "/",
-        "useWebsockets" : true
+        "basePath" : "/"
     }
 }
