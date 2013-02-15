@@ -9,69 +9,73 @@ var TodoView = View.extend("TodoView", {
 
     template: require("./TodoView.html"),
 
+    domEvents: {
+        destroyButton: {
+            click: "_onDestroyButtonClick"
+        },
+        completed: {
+            click: "_onCompletedClick"
+        },
+        title: {
+            dblclick: "_onTitleDblclick"
+        },
+        titleEdit: {
+            blur: "_onTitleEditBlur",
+            keypress: "_onTitleEditKeyPress"
+        }
+    },
+
     constructor: function () {
         this._super();
-        this._initNodeEvents();
-
-        this.on("beforeRender", this._onBeforeRender, this);
+        this.on("render", this._onRender, this);
     },
 
-    _onBeforeRender: function () {
-
+    _onRender: function () {
         var completed = this._model.get("completed");
-        $(this._nodeMap.todoListItem).toggleClass("completed", completed);
+
+        $(this._nodes.todoListItem).toggleClass("completed", completed);
     },
 
-    _initNodeEvents: function () {
-        var self = this;
-
-        this._addNodeEvents({
-            destroyButton: {
-                click: function () {
-                    self._model.destroy(function onModelDestroy(err) {
-                        if (err) throw err;
-                    });
-                }
-            },
-            completed: {
-                click: function () {
-                    self._model.toggle();
-                }
-            },
-            title: {
-                dblclick: function () {
-                    $(self._nodeMap.todoListItem).addClass("editing");
-                    self._nodeMap.titleEdit.value = self._model.get("title");
-                    self._nodeMap.titleEdit.focus();
-                }
-            },
-            titleEdit: {
-                blur: function () {
-                    var newTitle = this.value.trim(),
-                        todoModel = self._model;
-
-                    $(self._nodeMap.todoListItem).removeClass("editing");
-                    if (newTitle) {
-
-                        todoModel.set("title", newTitle);
-
-                        todoModel.save(function onModelSave(err) {
-                            if (err) throw err;
-                        });
-                    } else {
-                        todoModel.destroy(function onModelDestroy(err) {
-                            if (err) throw err;
-                        });
-                    }
-                },
-                keypress: function (event) {
-                    if (event.which === constants.KEY_ENTER) {
-                        this.blur();
-                    }
-                }
-            }
+    _onDestroyButtonClick: function () {
+        this._model.destroy(function onModelDestroy(err) {
+            if (err) throw err;
         });
+    },
+
+    _onCompletedClick: function () {
+        this._model.toggle();
+    },
+
+    _onTitleDblclick: function () {
+        $(this._nodes.todoListItem).addClass("editing");
+        this._nodes.titleEdit.value = this._model.get("title");
+        this._nodes.titleEdit.focus();
+    },
+
+    _onTitleEditBlur: function (event) {
+        var newTitle = event.target.value.trim(),
+            model = this._model;
+
+        $(this._nodes.todoListItem).removeClass("editing");
+
+        if (newTitle) {
+            model.set("title", newTitle);
+            model.save(function onModelSave(err) {
+                if (err) throw err;
+            });
+        } else {
+            model.destroy(function onModelDestroy(err) {
+                if (err) throw err;
+            });
+        }
+    },
+
+    _onTitleEditKeyPress: function (event) {
+        if (event.which === constants.KEY_ENTER) {
+            event.target.blur();
+        }
     }
+
 });
 
 module.exports = TodoView;
